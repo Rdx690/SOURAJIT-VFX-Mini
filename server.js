@@ -349,7 +349,7 @@ async function startUserSession(uid, phoneNumber) {
       const target = ownJid(sock);
       if (!target) continue;
       try {
-        await sock.sendMessage(target, { text: '🛡️ ANTI-DELETE\\nChat: ' + saved.chat + '\\nSender: ' + saved.sender + '\\nMessage: ' + saved.text });
+        await sock.sendMessage(target, { text: '🛡️ ANTI-DELETE\nChat: ' + saved.chat + '\nSender: ' + saved.sender + '\nMessage: ' + saved.text });
       } catch (error) {
         console.warn('[anti-delete] Could not forward deleted text:', error.message);
       }
