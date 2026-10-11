@@ -1,0 +1,1 @@
+module.exports = { name:'info', aliases:[], description:'Show bot info', async execute({reply,botName,prefix}) { await reply('🤖 ' + botName + '\\nPrefix: ' + prefix + '\\nEngine: SOURAJIT VFX Mini'); } };
