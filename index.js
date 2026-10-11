@@ -7,6 +7,7 @@ const {
 const config = require('./config');
 const commandTools = require('./commands');
 const downloaderTools = require('./downloader');
+const mediaTools = require('./media');
 const settings = require('./settings');
 const pluginSystem = require('./plugins');
 const fs = require('fs');
@@ -193,6 +194,7 @@ async function startBot() {
             await reply(config.OWNER_NUMBERS.length ? 'Owner contact is configured privately by the operator.' : 'Owner contact is not configured. Set OWNER_NUMBER in your private .env file.');
           } else {
             let handled = await pluginSystem.executePlugin({ command, args, prefix: currentPrefix, botName: settings.get('botName'), reply, sock, message, jid, isOwner: isOwner(jid) });
+            if (!handled) handled = await mediaTools.executeMediaCommand({ command, args, reply, sock, jid, message, botName: settings.get('botName') });
             if (!handled) handled = await downloaderTools.executeDownloader({ command, args, reply });
             if (!handled) handled = await commandTools.execute({ command, args, prefix: currentPrefix, botName: settings.get('botName'), reply });
             if (!handled) await reply(`Unknown command: ${command}\nType ${currentPrefix}menu to see available commands.`);
