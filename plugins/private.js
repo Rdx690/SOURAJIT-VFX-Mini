@@ -1,0 +1,1 @@
+module.exports = { name:'private', aliases:[], description:'Explain private mode', async execute({reply}) { await reply('🔒 Private mode is enabled by default. Group messages are ignored unless the server setting is changed.'); } };
