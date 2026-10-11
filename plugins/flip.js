@@ -1,0 +1,1 @@
+module.exports = { name:'flip', aliases:['coinflip'], description:'Flip a coin', async execute({reply}) { await reply('🪙 ' + (Math.random()<.5?'Heads':'Tails')); } };
