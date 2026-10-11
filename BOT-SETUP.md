@@ -30,6 +30,23 @@ This repository contains a WhatsApp bot starter and a separate static landing pa
 | `.lower <text>` | Convert text to lowercase |
 | `.count <text>` | Count characters and words |
 
+## Settings and plugin system
+
+Persistent settings are stored locally in `data/settings.json`; do not commit that runtime data file.
+
+Owner-only controls (set `OWNER_NUMBER` in your private `.env`):
+- `.settings` — show settings and loaded plugin count
+- `.setprefix <symbol>` — set a 1–3 character prefix
+- `.setname <name>` — change the displayed bot name
+- `.autoread on/off` — toggle read receipts
+- `.public` / `.private` — save the mode setting (this does not add public pairing)
+- `.plugins` — list plugins
+- `.pluginreload` — reload plugin files
+
+Plugins live in `plugins/*.js` and export an object with `name`, optional `aliases`, optional `description`, and an async `execute(context)` function. The context includes `reply`, `args`, `command`, `sock`, `message`, `jid`, and an `isOwner` helper. Only install plugins you trust: JavaScript plugins execute with the bot process's permissions. The included examples are `ping` and `uptime`.
+
+Settings such as anti-link, welcome and auto-react are currently stored/displayed as configuration flags only; their moderation/automation handlers are not implemented yet.
+
 ## Downloader commands
 
 The following commands are wired to a configurable external HTTPS API adapter:
