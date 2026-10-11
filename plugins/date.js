@@ -1,0 +1,1 @@
+module.exports = { name:'date', aliases:[], description:'Show today date', async execute({reply}) { await reply('📅 ' + new Date().toLocaleDateString('en-IN',{dateStyle:'full'})); } };
