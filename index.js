@@ -6,6 +6,7 @@ const {
 } = require('@whiskeysockets/baileys');
 const config = require('./config');
 const commandTools = require('./commands');
+const downloaderTools = require('./downloader');
 const fs = require('fs');
 const path = require('path');
 
@@ -137,13 +138,17 @@ async function startBot() {
               await reply('Owner contact is configured privately by the operator.');
             }
           } else {
-            const handled = await commandTools.execute({
-              command,
-              args: text.slice(config.PREFIX.length).trim().split(/\s+/).slice(1),
-              prefix: config.PREFIX,
-              botName: config.BOT_NAME,
-              reply
-            });
+            const args = text.slice(config.PREFIX.length).trim().split(/\s+/).slice(1);
+            let handled = await downloaderTools.executeDownloader({ command, args, reply });
+            if (!handled) {
+              handled = await commandTools.execute({
+                command,
+                args,
+                prefix: config.PREFIX,
+                botName: config.BOT_NAME,
+                reply
+              });
+            }
             if (!handled) {
               await reply(`Unknown command: ${command}\nType ${config.PREFIX}menu to see available commands.`);
             }
