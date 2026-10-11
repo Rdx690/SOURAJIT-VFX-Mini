@@ -10,6 +10,25 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
+    /* Premium website-opening intro */
+    html.intro-lock,html.intro-lock body{overflow:hidden}
+    .intro-screen{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;overflow:hidden;background:#060812;transition:opacity .75s ease,visibility .75s ease}
+    .intro-screen:before,.intro-screen:after{content:"";position:absolute;width:min(76vw,520px);aspect-ratio:1;border:1px solid #69f4ff35;border-radius:50%;animation:intro-orbit 7s linear infinite}
+    .intro-screen:after{width:min(58vw,390px);border-color:#a18aff45;animation-direction:reverse;animation-duration:5s}
+    .intro-screen.is-gone{opacity:0;visibility:hidden;pointer-events:none}
+    .intro-content{position:relative;z-index:1;text-align:center;padding:24px;animation:intro-rise 1s cubic-bezier(.2,.8,.2,1) both}
+    .intro-mark{width:88px;height:88px;margin:0 auto 24px;display:grid;place-items:center;border-radius:27px;background:linear-gradient(135deg,#69f4ff,#a18aff 58%,#ff72cb);color:#070b14;font-size:29px;font-weight:900;box-shadow:0 0 28px #69f4ff40,0 0 90px #a18aff26;animation:intro-pulse 2s ease-in-out infinite}
+    .intro-overline{font:10px 'DM Mono',monospace;letter-spacing:.3em;color:#69f4ff;text-transform:uppercase}
+    .intro-title{font:800 clamp(27px,6vw,45px)/1.1 Manrope,system-ui,sans-serif;letter-spacing:-.06em;margin:13px 0 10px;color:#f7f7ff}
+    .intro-title span{background:linear-gradient(100deg,#69f4ff,#b7a4ff,#ff72cb);-webkit-background-clip:text;background-clip:text;color:transparent}
+    .intro-sub{font:11px 'DM Mono',monospace;color:#8f9ab8;letter-spacing:.12em}
+    .intro-track{width:min(230px,65vw);height:3px;margin:26px auto 0;background:#ffffff12;border-radius:9px;overflow:hidden}
+    .intro-track span{display:block;height:100%;width:35%;border-radius:9px;background:linear-gradient(90deg,#69f4ff,#a18aff,#ff72cb);animation:intro-load 1.35s ease-in-out forwards}
+    @keyframes intro-rise{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+    @keyframes intro-orbit{to{transform:rotate(360deg) scale(1.04)}}
+    @keyframes intro-pulse{0%,100%{transform:scale(1);box-shadow:0 0 28px #69f4ff40,0 0 90px #a18aff26}50%{transform:scale(1.05);box-shadow:0 0 40px #69f4ff70,0 0 110px #a18aff45}}
+    @keyframes intro-load{to{width:100%}}
+    @media(prefers-reduced-motion:reduce){.intro-screen,.intro-screen:before,.intro-screen:after,.intro-content,.intro-mark,.intro-track span{animation:none!important;transition:none!important}.intro-track span{width:100%}}
     :root{--bg:#080812;--panel:rgba(18,19,39,.72);--line:rgba(255,255,255,.11);--text:#f7f7ff;--muted:#a4a8c3;--cyan:#69f4ff;--violet:#a18aff;--pink:#ff72cb;--green:#9effc4}
     *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:Manrope,system-ui,sans-serif;overflow-x:hidden}
     body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-2;background:radial-gradient(ellipse at 15% 10%,rgba(105,244,255,.13),transparent 32%),radial-gradient(ellipse at 86% 23%,rgba(161,138,255,.16),transparent 33%),radial-gradient(ellipse at 55% 90%,rgba(255,114,203,.10),transparent 35%)}
@@ -35,6 +54,15 @@
   </style>
 </head>
 <body>
+<div class="intro-screen" id="introScreen" role="status" aria-label="Loading SOURAJIT VFX Mini">
+  <div class="intro-content">
+    <div class="intro-mark">SV</div>
+    <div class="intro-overline">Mini Automation Lab</div>
+    <div class="intro-title">SOURAJIT <span>VFX</span></div>
+    <div class="intro-sub">INITIALIZING EXPERIENCE...</div>
+    <div class="intro-track"><span></span></div>
+  </div>
+</div>
 <header class="wrap nav">
   <a class="brand" href="#home" aria-label="Sourajit VFX home"><span class="logo">SV</span><span>SOURAJIT VFX<small>MINI AUTOMATION LAB</small></span></a>
   <nav class="links" id="navlinks"><a href="#features">Features</a><a href="#commands">Commands</a><a href="#setup">Setup</a><a href="#about">About</a><a href="dashboard.html">Dashboard</a><a href="connect.html">Connect WhatsApp</a></nav>
@@ -86,6 +114,22 @@
 </main>
 <footer class="wrap footer"><div>© <span id="year"></span> <b>SOURAJIT VFX</b> · MINI AUTOMATION LAB</div><div>Designed with neon energy. Use responsibly.</div></footer>
 <script>
+  document.documentElement.classList.add('intro-lock');
+  (() => {
+    const screen = document.getElementById('introScreen');
+    const started = Date.now();
+    const hideIntro = () => {
+      const remaining = Math.max(0, 1450 - (Date.now() - started));
+      setTimeout(() => {
+        screen.classList.add('is-gone');
+        document.documentElement.classList.remove('intro-lock');
+        setTimeout(() => screen.remove(), 800);
+      }, remaining);
+    };
+    if (document.readyState === 'complete') hideIntro();
+    else window.addEventListener('load', hideIntro, { once: true });
+    setTimeout(hideIntro, 2600);
+  })();
   const menuButton = document.getElementById('menubtn');
   const nav = document.getElementById('navlinks');
   menuButton.addEventListener('click', () => {
