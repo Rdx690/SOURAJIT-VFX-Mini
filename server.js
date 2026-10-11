@@ -48,6 +48,7 @@ fs.mkdirSync(SESSIONS_DIR, { recursive: true });
 const sessions = new Map();
 const DEFAULT_SETTINGS = Object.freeze({
   botName: 'SOURAJIT VFX Mini',
+  botPictureUrl: '',
   prefix: '.',
   autoRead: false,
   autoReact: false,
@@ -141,7 +142,7 @@ async function handleMessage(uid, sock, message) {
         '╰──────────────────',
         'Managed from your SOURAJIT VFX dashboard.'
       ].join('\n');
-      const picture = process.env.BOT_PICTURE_URL;
+      const picture = s.botPictureUrl || process.env.BOT_PICTURE_URL;
       if (picture && /^https:\/\//i.test(picture)) {
         try { await sock.sendMessage(jid, { image: { url: picture }, caption: menu }, { quoted: message }); }
         catch { await reply(menu); }
@@ -279,6 +280,7 @@ app.patch('/api/settings', (req, res) => {
     if (!SAFE_SETTINGS.has(key)) return res.status(400).json({ error: 'Unsupported setting: ' + key });
     if (typeof DEFAULT_SETTINGS[key] !== typeof value) return res.status(400).json({ error: 'Invalid value for ' + key });
     if (key === 'botName' && (!value.trim() || value.length > 60)) return res.status(400).json({ error: 'Bot name must be 1–60 characters.' });
+    if (key === 'botPictureUrl' && value && !/^https:\/\//i.test(value)) return res.status(400).json({ error: 'Menu image URL must use HTTPS.' });
     if (key === 'prefix' && (!value || value.length > 3 || /\s/.test(value))) return res.status(400).json({ error: 'Prefix must be 1–3 non-space characters.' });
   }
   const next = { ...current, ...updates };
