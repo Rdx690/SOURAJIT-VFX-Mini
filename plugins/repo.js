@@ -1,0 +1,1 @@
+module.exports = { name:'repo', aliases:['github'], description:'Show project GitHub repository', async execute({reply}) { await reply('🔗 https://github.com/Rdx690/SOURAJIT-VFX-Mini'); } };
