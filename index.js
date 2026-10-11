@@ -121,9 +121,10 @@ async function startBot() {
           || message.message.videoMessage?.caption
           || '';
         const text = body.trim();
-        if (!text.startsWith(config.PREFIX)) continue;
+        const activePrefix = settings.get('prefix') || config.PREFIX;
+        if (!text.startsWith(activePrefix)) continue;
 
-        const [rawCommand] = text.slice(config.PREFIX.length).trim().split(/\s+/);
+        const [rawCommand] = text.slice(activePrefix.length).trim().split(/\s+/);
         const command = (rawCommand || '').toLowerCase();
         const reply = (value) => sock.sendMessage(jid, { text: value }, { quoted: message });
 
