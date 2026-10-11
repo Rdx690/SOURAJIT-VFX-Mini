@@ -193,7 +193,25 @@ async function startBot() {
           } else if (command === 'owner') {
             await reply(config.OWNER_NUMBERS.length ? 'Owner contact is configured privately by the operator.' : 'Owner contact is not configured. Set OWNER_NUMBER in your private .env file.');
           } else {
-            let handled = await pluginSystem.executePlugin({ command, args, prefix: currentPrefix, botName: settings.get('botName'), reply, sock, message, jid, isOwner: isOwner(jid) });
+            let handled = false;
+            if (['menu', 'help', 'commands'].includes(command)) {
+              const caption = commandTools.getHelp(currentPrefix)
+                + '\\n\\n🔗 GitHub: ' + config.BOT_SOCIAL_LINK
+                + '\\n✨ Powered by ' + settings.get('botName');
+              if (config.BOT_PICTURE_URL) {
+                try {
+                  const picture = new URL(config.BOT_PICTURE_URL);
+                  if (picture.protocol !== 'https:') throw new Error('BOT_PICTURE_URL must use HTTPS');
+                  await sock.sendMessage(jid, { image: { url: picture.toString() }, caption }, { quoted: message });
+                } catch (error) {
+                  await reply(caption + '\\n⚠️ Profile image could not be loaded: ' + error.message);
+                }
+              } else {
+                await reply(caption);
+              }
+              handled = true;
+            }
+            if (!handled) handled = await pluginSystem.executePlugin({ command, args, prefix: currentPrefix, botName: settings.get('botName'), reply, sock, message, jid, isOwner: isOwner(jid) });
             if (!handled) handled = await mediaTools.executeMediaCommand({ command, args, reply, sock, jid, message, botName: settings.get('botName') });
             if (!handled) handled = await downloaderTools.executeDownloader({ command, args, reply });
             if (!handled) handled = await commandTools.execute({ command, args, prefix: currentPrefix, botName: settings.get('botName'), reply });
