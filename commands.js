@@ -39,7 +39,8 @@ const data = {
 
 function getHelp(prefix) {
   return [
-    '╭─「 SOURAJIT VFX COMMANDS 」',
+    '╭─「 𝐒ꭷᴜʀᴀᴊɪᴛ メ 𝐕𝐅𝐗 」',
+    '│ ⚡ PREMIUM MINI BOT',
     '│ GENERAL',
     `│ ${prefix}settings — Show settings (owner)`,
     `│ ${prefix}plugins — List plugins (owner)`,
@@ -55,6 +56,10 @@ function getHelp(prefix) {
     `│ ${prefix}joke, fact, quote, compliment`,
     `│ ${prefix}riddle, trivia, 8ball <question>`,
     `│ ${prefix}flip, dice, choose <a | b>`,
+    '│ MUSIC & MEDIA API',
+    `│ ${prefix}song / play / music <song name>`,
+    `│ ${prefix}video / ytmp4 <query or URL>`,
+    `│ ${prefix}insta / ig / igreel <Instagram URL>`,
     '│ DOWNLOADERS (provider required)',
     `│ ${prefix}ytmp3 <YouTube URL>`,
     `│ ${prefix}ytmp4 <YouTube URL>`,
@@ -67,7 +72,10 @@ function getHelp(prefix) {
     `│ ${prefix}echo <text>, reverse <text>`,
     `│ ${prefix}count <text>, upper <text>, lower <text>`,
     '│',
-    '│ Download commands need a trusted HTTPS API in DOWNLOAD_API_URL.',
+    '│ Song/video/Instagram: Sayan Nexus API',
+    '│ GitHub: github.com/Rdx690/SOURAJIT-VFX-Mini',
+    '│ Downloader commands may require provider configuration.',
+    '│ Only download media you own or have permission to use.',
     '╰────────────────────',
     '',
     'This starter only implements the commands listed here.'
