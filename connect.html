@@ -26,8 +26,8 @@ async function api(path, options={}) {
 }
 function renderStatus(data){
   $('qrImage').classList.add('hidden');$('pairCode').classList.add('hidden');$('qrPlaceholder').classList.remove('hidden');
-  if(data.qrDataUrl){$('qrImage').src=data.qrDataUrl;$('qrImage').classList.remove('hidden');$('qrPlaceholder').classList.add('hidden')}
-  else if(data.pairingCode){$('pairCode').textContent=data.pairingCode;$('pairCode').classList.remove('hidden');$('qrPlaceholder').classList.add('hidden')}
+  if(data.pairingCode){$('pairCode').textContent=data.pairingCode;$('pairCode').classList.remove('hidden');$('qrPlaceholder').classList.add('hidden')}
+  else if(data.qrDataUrl){$('qrImage').src=data.qrDataUrl;$('qrImage').classList.remove('hidden');$('qrPlaceholder').classList.add('hidden')}
   $('qrPlaceholder').textContent=data.message||data.state||'No session';
   message('connectStatus',data.message||data.state,data.connected?'good':'');
 }
