@@ -1,7 +1,7 @@
 module.exports = {
   name: 'menu',
   aliases: ['help', 'commands'],
-  description: 'Show all installed commands in categorized LEVANTER style',
+  description: 'Show installed commands in a randomly selected style',
   async execute({ reply, prefix, botName, settings }) {
     const fs = require('fs');
     const path = require('path');
@@ -15,9 +15,7 @@ module.exports = {
           const fullPath = path.join(dir, file);
           delete require.cache[require.resolve(fullPath)];
           return require(fullPath);
-        } catch {
-          return null;
-        }
+        } catch { return null; }
       })
       .filter(plugin => plugin && typeof plugin.name === 'string' && typeof plugin.execute === 'function');
 
@@ -26,7 +24,7 @@ module.exports = {
     const categories = [
       { title: 'ᴀɪ', commands: ['gpt'] },
       { title: 'ᴅᴏᴡɴʟᴏᴀᴅ', commands: ['ytmp3', 'ytmp4', 'tiktok', 'ig', 'igreel', 'facebook', 'spotify', 'pinterest'] },
-      { title: 'ᴛᴏᴏʟs', commands: ['font', 'getpp', 'fullpp', 'setpp', 'ssweb'] },
+      { title: 'ᴛᴏᴏʟs', commands: ['font', 'getpp', 'fullpp', 'setpp', 'ssweb', 'tg'] },
       { title: 'sᴇᴄᴜʀɪᴛʏ', commands: ['antidelete'] },
       { title: 'sᴄʜᴇᴅᴜʟᴇʀ', commands: ['schedule', 'statuschedule', 'schedules'] },
       { title: 'ʙᴏᴛ', commands: ['menu', 'alive', 'ping', 'uptime', 'repo', 'info'] },
@@ -54,17 +52,9 @@ module.exports = {
         ''
       );
     }
-
-    const remaining = unique
-      .filter(plugin => !included.has(plugin.name.toLowerCase()))
-      .sort((a, b) => a.name.localeCompare(b.name));
+    const remaining = unique.filter(plugin => !included.has(plugin.name.toLowerCase())).sort((a, b) => a.name.localeCompare(b.name));
     if (remaining.length) {
-      sections.push(
-        '╭─❏ ᴏᴛʜᴇʀ ᴘʟᴜɢɪɴs ❏',
-        ...remaining.map(plugin => ' │ ' + prefix + plugin.name.toUpperCase()),
-        ' ╰─────────────────',
-        ''
-      );
+      sections.push('╭─❏ ᴏᴛʜᴇʀ ᴘʟᴜɢɪɴs ❏', ...remaining.map(plugin => ' │ ' + prefix + plugin.name.toUpperCase()), ' ╰─────────────────', '');
     }
 
     const now = new Date();
@@ -78,25 +68,19 @@ module.exports = {
     const platform = process.env.PLATFORM_LABEL || (os.platform() + ' ' + os.arch());
     const owner = process.env.MENU_USER_NAME || '𝐒ꭷᴜʀᴀᴊɪᴛ メ 𝐕𝐅𝐗';
     const name = settings?.botName || botName || 'SOURAJIT VFX MINI';
-
-    const header = [
-      '╭═══ ' + name.toUpperCase() + ' ═══⊷',
-      '┃❃╭──────────────',
-      '┃❃│ Prefix : ' + prefix,
-      '┃❃│ User : ' + owner,
-      '┃❃│ Time : ' + time,
-      '┃❃│ Day : ' + day,
-      '┃❃│ Date : ' + date,
-      '┃❃│ Version : 6.2.0',
-      '┃❃│ Plugins : ' + unique.length,
-      '┃❃│ Ram : ' + usedMB + '/' + totalMB + 'MB',
-      '┃❃│ Uptime : ' + uptime,
-      '┃❃│ Platform : ' + platform,
-      '┃❃╰───────────────',
-      '╰═════════════════⊷',
-      ''
+    const stats = [
+      'User: ' + owner, 'Time: ' + time + ' | ' + day, 'Date: ' + date,
+      'Version: 6.2.0 | Plugins: ' + unique.length, 'RAM: ' + usedMB + '/' + totalMB + 'MB',
+      'Uptime: ' + uptime, 'Platform: ' + platform, 'Prefix: ' + prefix
+    ].join('\n');
+    const body = sections.join('\n').trim();
+    const styles = [
+      () => ['╭═══⊷ ' + name.toUpperCase() + ' ⊶═══╮', '┃ 👑 ' + owner, '┃ ⚡ Prefix: ' + prefix + ' | Plugins: ' + unique.length, '┃ 🕒 ' + time + ' • ' + date, '┃ 💻 RAM: ' + usedMB + '/' + totalMB + 'MB • ' + uptime, '╰━━━━━━━━━━━━━━━━━━╯', '', body, '', '⚡ Powered by SOURAJIT VFX'].join('\n'),
+      () => ['⚡『 ' + name.toUpperCase() + ' 』⚡', '┏━━━━━━━━━━━━━━━━━━', '┃ ◈ SYSTEM INFO', ...stats.split('\n').map(line => '┃ ' + line), '┗━━━━━━━━━━━━━━━━━━', '', '╔══〔 COMMAND CENTER 〕══╗', body, '╚══════════════════════╝', '✦ SOURAJIT VFX • NEON EDITION'].join('\n'),
+      () => ['╔══════════════════╗', '║  🚀 ' + name.toUpperCase(), '╚══════════════════╝', '〔 BOT DASHBOARD 〕', ...stats.split('\n').map(line => '› ' + line), '', '〔 AVAILABLE COMMANDS 〕', body, '', '© SOURAJIT VFX'].join('\n'),
+      () => ['┌───「 ' + name.toUpperCase() + ' 」', '│ 👤 ' + owner, '│ ⚙️ Prefix: ' + prefix, '│ 📦 Plugins: ' + unique.length, '│ 🟢 Online • ' + uptime, '└──────────────────', '', '『 SYSTEM MENU 』', body, '', '✨ Powered by SOURAJIT VFX'].join('\n')
     ];
-
-    await reply([...header, ...sections, '⚡ Powered by SOURAJIT VFX'].join('\n'));
+    const selected = Math.floor(Math.random() * styles.length);
+    await reply(styles[selected]());
   }
 };
