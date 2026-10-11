@@ -142,7 +142,7 @@ async function handleMessage(uid, sock, message) {
   const reply = value => safeReply(sock, jid, value, message);
   try {
     const pluginHandled = await pluginSystem.executePlugin({
-      command, args: parts, prefix: s.prefix, botName: s.botName, reply, sock, message, jid,
+      command, args: parts, prefix: s.prefix, botName: s.botName, settings: s, reply, sock, message, jid,
       isOwner: false
     });
     if (pluginHandled) return;
