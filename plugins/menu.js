@@ -26,7 +26,7 @@ module.exports = {
     const categories = [
       { title: 'ᴀɪ', commands: ['gpt'] },
       { title: 'ᴅᴏᴡɴʟᴏᴀᴅ', commands: ['ytmp3', 'ytmp4', 'tiktok', 'ig', 'igreel', 'facebook', 'spotify', 'pinterest'] },
-      { title: 'ᴛᴏᴏʟs', commands: ['font', 'getpp', 'fullpp', 'ssweb'] },
+      { title: 'ᴛᴏᴏʟs', commands: ['font', 'getpp', 'fullpp', 'setpp', 'ssweb'] },
       { title: 'sᴇᴄᴜʀɪᴛʏ', commands: ['antidelete'] },
       { title: 'sᴄʜᴇᴅᴜʟᴇʀ', commands: ['schedule', 'statuschedule', 'schedules'] },
       { title: 'ʙᴏᴛ', commands: ['menu', 'alive', 'ping', 'uptime', 'repo', 'info'] },
