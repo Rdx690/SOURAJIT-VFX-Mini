@@ -1,0 +1,1 @@
+module.exports = { name:'echo', aliases:[], description:'Repeat text', async execute({reply,args,prefix}) { const text=args.join(' '); await reply(text || 'Usage: ' + prefix + 'echo hello'); } };
