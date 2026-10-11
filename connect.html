@@ -10,7 +10,7 @@
 <script type="module">
 import {auth} from './firebase.js';
 import {onAuthStateChanged,signOut} from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js';
-const API_BASE = 'https://YOUR-SERVICE.koyeb.app';
+const API_BASE = 'https://industrial-conni-sourajit-733e21ee.koyeb.app';
 const $ = id => document.getElementById(id);
 let user = null;let statusPoller=null;
 function startPolling(){if(statusPoller)clearInterval(statusPoller);statusPoller=setInterval(async()=>{try{const d=await api('/api/status');renderStatus(d);if(d.connected){clearInterval(statusPoller);statusPoller=null}}catch{}},2000)}
