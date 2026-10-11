@@ -15,6 +15,6 @@ module.exports = {
       '┃ ✦ Group commands : ' + (s.privateMode ? 'BLOCKED 🔒' : 'ALLOWED 🌐'),
       '╰━━━━━━━━━━━━━━━━━━━━╯',
       'Change saved options from the web dashboard.'
-    ].join('\\n'));
+    ].join('\n'));
   }
 };
