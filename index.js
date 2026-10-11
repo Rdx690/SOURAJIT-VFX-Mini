@@ -202,7 +202,7 @@ async function startBot() {
       }
     });
 
-    if (config.AUTO_READ) {
+    if (settings.get('autoRead')) {
       sock.ev.on('messages.upsert', async ({ messages }) => {
         for (const message of messages) {
           if (message.key?.remoteJid && !message.key.fromMe) {
