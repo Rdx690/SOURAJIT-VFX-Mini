@@ -24,7 +24,9 @@ module.exports = {
     const unique = [...new Map(plugins.map(plugin => [plugin.name.toLowerCase(), plugin])).values()];
     const byName = new Map(unique.map(plugin => [plugin.name.toLowerCase(), plugin]));
     const categories = [
+      { title: 'ᴀɪ', commands: ['gpt'] },
       { title: 'ᴅᴏᴡɴʟᴏᴀᴅ', commands: ['ytmp3', 'ytmp4', 'tiktok', 'ig', 'igreel', 'facebook', 'spotify', 'pinterest'] },
+      { title: 'ᴛᴏᴏʟs', commands: ['font', 'getpp', 'ssweb'] },
       { title: 'ʙᴏᴛ', commands: ['menu', 'alive', 'ping', 'uptime', 'repo', 'info'] },
       { title: 'sᴇᴛᴛɪɴɢs', commands: ['settings', 'private'] },
       { title: 'ᴛᴇxᴛ ᴛᴏᴏʟs', commands: ['echo', 'count', 'upper', 'lower', 'reverse'] },
