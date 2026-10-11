@@ -1,19 +1,27 @@
 module.exports = {
   name: 'ping',
   aliases: ['latency'],
-  description: 'Premium styled response and latency check',
-  async execute({ reply }) {
-    const start = Date.now();
-    await new Promise(resolve => setTimeout(resolve, 30));
-    const ms = Date.now() - start;
+  description: 'Neon styled ping and response latency check',
+  async execute({ reply, botName }) {
+    const started = process.hrtime.bigint();
+    // Yield once so the reported value reflects local command response processing, not a fabricated network RTT.
+    await new Promise(resolve => setImmediate(resolve));
+    const ms = Number(process.hrtime.bigint() - started) / 1e6;
+    const speed = ms < 100 ? '⚡ VERY FAST' : ms < 300 ? '🚀 FAST' : '⏳ NORMAL';
+    const name = botName || 'SOURAJIT VFX';
     await reply([
-      '╭═══⊷ 𝐋𝐄𝐕𝐀𝐍𝐓𝐄𝐑 𝐏𝐈𝐍𝐆 ⊶═══╮',
-      '┃ ✦ Status : ONLINE 🟢',
-      '┃ ✦ Speed : ' + ms + ' ms',
-      '┃ ✦ Signal : ▰▰▰▰▰▰▰▰▰▰ 100%',
-      '┃ ✦ Engine : SOURAJIT VFX',
-      '╰══════════════════════╯',
-      '⚡ Fast • Stable • Premium'
+      '╭━━━〔 ⚡ 𝐒𝐎𝐔𝐑𝐀𝐉𝐈𝐓 𝐕𝐅𝐗 〕━━━╮',
+      '┃',
+      '┃   ✨ 𝐏𝐎𝐍𝐆! ✨',
+      '┃',
+      '┃  ◈ Response: ' + ms.toFixed(2) + ' ms',
+      '┃  ◈ Status: 🟢 ONLINE',
+      '┃  ◈ Speed: ' + speed,
+      '┃  ◈ Bot: ' + name,
+      '┃',
+      '╰━━━━━━━━━━━━━━━━━━━━━━╯',
+      ' ▰▰▰▰▰▰▰▰▰▰ 100%',
+      '⚡ Fast • Stable • SOURAJIT VFX'
     ].join('\n'));
   }
 };
