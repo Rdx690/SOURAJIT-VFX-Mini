@@ -148,7 +148,8 @@ async function handleMessage(uid, sock, message) {
   try {
     const pluginHandled = await pluginSystem.executePlugin({
       command, args: parts, prefix: s.prefix, botName: s.botName, settings: s, reply, sock, message, jid,
-      isOwner: false
+      setPrivateMode: enabled => { const current = loadSettings(uid); const next = { ...current, privateMode: Boolean(enabled) }; saveSettings(uid, next); return next; },
+      isOwner: isSelfChat
     });
     if (pluginHandled) return;
     if (['menu', 'help', 'commands'].includes(command)) {
@@ -235,6 +236,14 @@ async function startUserSession(uid, phoneNumber) {
       current.pairingCode = null;
       current.qrDataUrl = null;
       current.message = 'WhatsApp connected successfully.';
+      // Send one connection notice to the paired account's own chat. markOnlineOnConnect remains disabled.
+      const ownJid = String(sock.user?.id || '').split(':')[0].split('@')[0] + '@s.whatsapp.net';
+      if (ownJid && !current.startNoticeSent) {
+        current.startNoticeSent = true;
+        const settings = loadSettings(uid);
+        const notice = '╭═══ ' + settings.botName.toUpperCase() + ' ═══⊷\\n┃ ✅ Bot connected successfully\\n┃ Prefix: ' + settings.prefix + '\\n┃ Mode: ' + (settings.privateMode ? 'PRIVATE 🔒' : 'PUBLIC 🌐') + '\\n┃ Always-online presence: OFF\\n┃ Commands: ' + settings.prefix + 'menu | ' + settings.prefix + 'gpt | ' + settings.prefix + 'font\\n╰═════════════════⊷';
+        sock.sendMessage(ownJid, { text: notice }).catch(error => console.warn('[startup notice] Could not send self-chat notice:', error.message));
+      }
     }
     if (update.connection === 'close') {
       console.warn('[whatsapp] Session closed for user ' + uid + '; status=' + (update.lastDisconnect?.error?.output?.statusCode ?? 'unknown') + '; error=' + (update.lastDisconnect?.error?.message || 'unknown'));
