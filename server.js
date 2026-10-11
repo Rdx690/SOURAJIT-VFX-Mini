@@ -21,7 +21,7 @@ app.use(express.json({ limit: '32kb' }));
 const allowedOrigins = (process.env.ALLOWED_ORIGINS || '').split(',').map(x => x.trim()).filter(Boolean);
 app.use(cors({
   origin(origin, callback) {
-    if (!origin || allowedOrigins.length === 0 || allowedOrigins.includes(origin)) return callback(null, true);
+    if (!origin || allowedOrigins.includes(origin) || (process.env.NODE_ENV !== 'production' && allowedOrigins.length === 0)) return callback(null, true);
     return callback(new Error('Origin not allowed'));
   },
   methods: ['GET', 'POST', 'PATCH', 'DELETE'],
@@ -251,6 +251,7 @@ async function startUserSession(uid, phoneNumber) {
 app.get('/health', (req, res) => res.json({ ok: true, service: 'sourajit-vfx-multi-user-bot' }));
 app.use('/api', requireUser);
 app.get('/api/me', (req, res) => res.json({ uid: req.user.uid, email: req.user.email }));
+app.get('/api/settings', (req, res) => res.json({ settings: loadSettings(req.user.uid) }));
 app.get('/api/status', (req, res) => res.json(publicStatus(req.user.uid)));
 app.post('/api/whatsapp/connect', async (req, res) => {
   try {
