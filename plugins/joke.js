@@ -1,0 +1,1 @@
+module.exports = { name:'joke', aliases:[], description:'Tell a random clean joke', async execute({reply}) { const a=['Why did the computer get cold? It left its Windows open. 😄','Why did the phone wear glasses? It lost its contacts. 😂','My Wi-Fi and I had an argument. It disconnected. 📶']; await reply(a[Math.floor(Math.random()*a.length)]); } };
