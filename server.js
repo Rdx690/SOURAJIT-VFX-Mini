@@ -58,7 +58,8 @@ const DEFAULT_SETTINGS = Object.freeze({
   autoReact: false,
   antiLink: false,
   welcome: false,
-  privateMode: true
+  privateMode: true,
+  antiDelete: true
 });
 const SAFE_SETTINGS = new Set(Object.keys(DEFAULT_SETTINGS));
 
@@ -105,6 +106,75 @@ function publicStatus(uid) {
 function safeReply(sock, jid, text, quoted) {
   return sock.sendMessage(jid, { text: String(text).slice(0, 3500) }, quoted ? { quoted } : {});
 }
+function ownJid(sock) {
+  const number = String(sock.user?.id || '').split(':')[0].split('@')[0];
+  return number ? number + '@s.whatsapp.net' : '';
+}
+function scheduleFile(uid) {
+  return path.join(userDir(uid), 'schedules.json');
+}
+function readSchedules(uid) {
+  try {
+    const value = JSON.parse(fs.readFileSync(scheduleFile(uid), 'utf8'));
+    return Array.isArray(value) ? value : [];
+  } catch { return []; }
+}
+function writeSchedules(uid, items) {
+  const dir = userDir(uid);
+  fs.mkdirSync(dir, { recursive: true, mode: 0o700 });
+  const file = scheduleFile(uid);
+  const tmp = file + '.tmp';
+  fs.writeFileSync(tmp, JSON.stringify(items, null, 2), { mode: 0o600 });
+  fs.renameSync(tmp, file);
+}
+function scheduleContext(uid) {
+  return {
+    addSchedule: async item => {
+      const items = readSchedules(uid);
+      const created = { ...item, id: require('crypto').randomBytes(4).toString('hex'), createdAt: Date.now() };
+      items.push(created);
+      writeSchedules(uid, items);
+      return created;
+    },
+    listSchedules: async () => readSchedules(uid).sort((a, b) => a.when - b.when),
+    deleteSchedule: async id => {
+      const items = readSchedules(uid);
+      const next = items.filter(item => item.id !== String(id));
+      if (next.length === items.length) return false;
+      writeSchedules(uid, next);
+      return true;
+    }
+  };
+}
+async function processScheduledItems() {
+  for (const [uid, session] of sessions) {
+    if (session.connection !== 'open' || !session.sock) continue;
+    const items = readSchedules(uid);
+    if (!items.length) continue;
+    const now = Date.now();
+    const due = items.filter(item => item.when <= now);
+    if (!due.length) continue;
+    const pending = items.filter(item => item.when > now);
+    for (const item of due) {
+      try {
+        if (item.kind === 'status') {
+          await session.sock.sendMessage('status@broadcast', { text: String(item.text).slice(0, 65000) });
+        } else {
+          const target = item.target === 'self' ? ownJid(session.sock) : item.target;
+          if (!target) throw new Error('Could not resolve own WhatsApp number');
+          await session.sock.sendMessage(target, { text: String(item.text).slice(0, 65000) });
+        }
+        const self = ownJid(session.sock);
+        if (self) await safeReply(session.sock, self, '✅ Scheduled ' + item.kind + ' sent. ID: ' + item.id, null).catch(() => {});
+      } catch (error) {
+        console.warn('[scheduler] Delivery failed for ' + item.id + ': ' + error.message);
+        pending.push({ ...item, when: now + 5 * 60 * 1000, attempts: (item.attempts || 0) + 1 });
+      }
+    }
+    writeSchedules(uid, pending);
+  }
+}
+setInterval(() => processScheduledItems().catch(error => console.error('[scheduler]', error.message)), 15_000);
 async function handleMessage(uid, sock, message) {
   if (!message?.message) return;
   const jid = message.key.remoteJid;
@@ -149,6 +219,8 @@ async function handleMessage(uid, sock, message) {
     const pluginHandled = await pluginSystem.executePlugin({
       command, args: parts, prefix: s.prefix, botName: s.botName, settings: s, reply, sock, message, jid,
       setPrivateMode: enabled => { const current = loadSettings(uid); const next = { ...current, privateMode: Boolean(enabled) }; saveSettings(uid, next); return next; },
+      setAntiDelete: enabled => { const current = loadSettings(uid); const next = { ...current, antiDelete: Boolean(enabled) }; saveSettings(uid, next); return next; },
+      ...scheduleContext(uid),
       isOwner: isSelfChat
     });
     if (pluginHandled) return;
@@ -262,10 +334,44 @@ async function startUserSession(uid, phoneNumber) {
       }
     }
   });
+  const recentMessages = new Map();
+  sock.ev.on('messages.update', async updates => {
+    const settings = loadSettings(uid);
+    if (settings.antiDelete === false) return;
+    for (const item of updates || []) {
+      const protocol = item.update?.message?.protocolMessage;
+      if (!protocol || protocol.type !== 0) continue;
+      const key = protocol.key || item.key;
+      const id = key?.id;
+      if (!id) continue;
+      const saved = recentMessages.get(id);
+      if (!saved) continue;
+      const target = ownJid(sock);
+      if (!target) continue;
+      try {
+        await sock.sendMessage(target, { text: '🛡️ ANTI-DELETE\\nChat: ' + saved.chat + '\\nSender: ' + saved.sender + '\\nMessage: ' + saved.text });
+      } catch (error) {
+        console.warn('[anti-delete] Could not forward deleted text:', error.message);
+      }
+      recentMessages.delete(id);
+    }
+  });
   sock.ev.on('messages.upsert', async ({ messages, type }) => {
     // Personal-number self-chat commands may arrive as append; ordinary incoming messages arrive as notify.
     if (type !== 'notify' && type !== 'append') return;
-    for (const message of messages) await handleMessage(uid, sock, message);
+    for (const message of messages) {
+      if (message?.key?.id && message?.message) {
+        const text = message.message.conversation || message.message.extendedTextMessage?.text ||
+          message.message.imageMessage?.caption || message.message.videoMessage?.caption || '';
+        recentMessages.set(message.key.id, {
+          chat: message.key.remoteJid || 'unknown',
+          sender: message.key.participant || message.key.remoteJid || 'unknown',
+          text: String(text || '[Non-text message]').slice(0, 1500)
+        });
+        if (recentMessages.size > 500) recentMessages.delete(recentMessages.keys().next().value);
+      }
+      await handleMessage(uid, sock, message);
+    }
   });
   sock.ev.on('group-participants.update', async update => {
     const settings = loadSettings(uid);
