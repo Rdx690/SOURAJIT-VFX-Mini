@@ -1,0 +1,1 @@
+module.exports = { name:'time', aliases:[], description:'Show current India time', async execute({reply}) { await reply('🕒 ' + new Date().toLocaleTimeString('en-IN',{timeStyle:'medium'})); } };
