@@ -1,0 +1,1 @@
+module.exports = { name:'count', aliases:[], description:'Count characters and words', async execute({reply,args,prefix}) { const s=args.join(' ').trim(); await reply(s ? '🔢 Characters: ' + Array.from(s).length + '\\nWords: ' + s.split(/\\s+/).length : 'Usage: ' + prefix + 'count your text'); } };
