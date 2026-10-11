@@ -187,7 +187,7 @@ async function startUserSession(uid, phoneNumber) {
     auth: state,
     logger: pino({ level: process.env.LOG_LEVEL || 'silent' }),
     printQRInTerminal: false,
-    browser: ['SOURAJIT VFX MINI', 'Chrome', '1.0.0'],
+    browser: ['Windows', 'Chrome', '10.0.0'],
     markOnlineOnConnect: false,
     syncFullHistory: false
   });
@@ -242,10 +242,19 @@ async function startUserSession(uid, phoneNumber) {
     } catch (e) { console.warn('[welcome]', e.message); }
   });
   if (!state.creds.registered && phoneNumber) {
-    await new Promise(resolve => setTimeout(resolve, 1800));
-    const code = await sock.requestPairingCode(phoneNumber);
-    entry.pairingCode = code;
-    entry.message = 'Enter the pairing code in WhatsApp Linked Devices on your own phone.';
+    try {
+      // Give the WhatsApp socket time to initialize before requesting a code.
+      await new Promise(resolve => setTimeout(resolve, 2500));
+      const code = await sock.requestPairingCode(phoneNumber);
+      entry.pairingCode = String(code).match(/.{1,4}/g)?.join('-') || String(code);
+      entry.message = 'Enter this fresh code in WhatsApp > Linked devices > Link with phone number.';
+    } catch (error) {
+      entry.connection = 'close';
+      entry.message = 'Pairing code request failed. Disconnect this attempt and try again.';
+      sessions.delete(uid);
+      try { sock.end(new Error('Pairing code request failed')); } catch {}
+      throw new Error('WhatsApp could not create a pairing code: ' + (error?.message || 'unknown error'));
+    }
   }
   return publicStatus(uid);
 }
