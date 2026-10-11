@@ -1,16 +1,68 @@
 module.exports = {
   name: 'menu',
   aliases: ['help', 'commands'],
-  description: 'Show every installed command plugin',
+  description: 'Show all installed commands in categorized LEVANTER style',
   async execute({ reply, prefix, botName, settings }) {
     const fs = require('fs');
     const path = require('path');
     const os = require('os');
+
     const dir = path.resolve(process.env.PLUGIN_DIR || 'plugins');
-    const plugins = fs.readdirSync(dir).filter(f => f.endsWith('.js')).map(f => {
-      try { const fullPath = path.join(dir, f); delete require.cache[require.resolve(fullPath)]; return require(fullPath); } catch { return null; }
-    }).filter(p => p && typeof p.name === 'string' && typeof p.execute === 'function');
-    const unique = [...new Map(plugins.map(p => [p.name.toLowerCase(), p])).values()].sort((a, b) => a.name.localeCompare(b.name));
+    const plugins = fs.readdirSync(dir)
+      .filter(file => file.endsWith('.js'))
+      .map(file => {
+        try {
+          const fullPath = path.join(dir, file);
+          delete require.cache[require.resolve(fullPath)];
+          return require(fullPath);
+        } catch {
+          return null;
+        }
+      })
+      .filter(plugin => plugin && typeof plugin.name === 'string' && typeof plugin.execute === 'function');
+
+    const unique = [...new Map(plugins.map(plugin => [plugin.name.toLowerCase(), plugin])).values()];
+    const byName = new Map(unique.map(plugin => [plugin.name.toLowerCase(), plugin]));
+    const categories = [
+      { title: 'ᴅᴏᴡɴʟᴏᴀᴅ', commands: ['ytmp3', 'ytmp4', 'tiktok', 'ig', 'igreel', 'facebook', 'spotify', 'pinterest'] },
+      { title: 'ʙᴏᴛ', commands: ['menu', 'alive', 'ping', 'uptime', 'repo', 'info'] },
+      { title: 'sᴇᴛᴛɪɴɢs', commands: ['settings', 'private'] },
+      { title: 'ᴛᴇxᴛ ᴛᴏᴏʟs', commands: ['echo', 'count', 'upper', 'lower', 'reverse'] },
+      { title: 'ғᴜɴ & ᴇɴᴛᴇʀᴛᴀɪɴᴍᴇɴᴛ', commands: ['joke', 'fact', 'quote', 'flip', 'dice'] },
+      { title: 'ᴅᴀᴛᴇ & ᴛɪᴍᴇ', commands: ['time', 'date'] }
+    ];
+
+    const included = new Set();
+    const sections = [];
+    for (const category of categories) {
+      const commands = category.commands.filter(name => byName.has(name) && !included.has(name));
+      if (!commands.length) continue;
+      commands.forEach(name => included.add(name));
+      sections.push(
+        '╭─❏ ' + category.title + ' ❏',
+        ...commands.map(name => {
+          const plugin = byName.get(name);
+          const aliases = Array.isArray(plugin.aliases) ? plugin.aliases.filter(alias => typeof alias === 'string') : [];
+          const aliasText = aliases.length ? ' 〔' + aliases.map(alias => prefix + alias).join(', ') + '〕' : '';
+          return ' │ ' + prefix + plugin.name.toUpperCase() + aliasText;
+        }),
+        ' ╰─────────────────',
+        ''
+      );
+    }
+
+    const remaining = unique
+      .filter(plugin => !included.has(plugin.name.toLowerCase()))
+      .sort((a, b) => a.name.localeCompare(b.name));
+    if (remaining.length) {
+      sections.push(
+        '╭─❏ ᴏᴛʜᴇʀ ᴘʟᴜɢɪɴs ❏',
+        ...remaining.map(plugin => ' │ ' + prefix + plugin.name.toUpperCase()),
+        ' ╰─────────────────',
+        ''
+      );
+    }
+
     const now = new Date();
     const time = now.toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', hour12: true });
     const day = now.toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', weekday: 'long' });
@@ -21,8 +73,9 @@ module.exports = {
     const uptime = Math.floor(up / 3600) + 'h ' + Math.floor((up % 3600) / 60) + 'm ' + (up % 60) + 's';
     const platform = process.env.PLATFORM_LABEL || (os.platform() + ' ' + os.arch());
     const owner = process.env.MENU_USER_NAME || '𝐒ꭷᴜʀᴀᴊɪᴛ メ 𝐕𝐅𝐗';
-    const name = settings?.botName || botName || 'LEVANTER';
-    const lines = [
+    const name = settings?.botName || botName || 'SOURAJIT VFX MINI';
+
+    const header = [
       '╭═══ ' + name.toUpperCase() + ' ═══⊷',
       '┃❃╭──────────────',
       '┃❃│ Prefix : ' + prefix,
@@ -37,15 +90,9 @@ module.exports = {
       '┃❃│ Platform : ' + platform,
       '┃❃╰───────────────',
       '╰═════════════════⊷',
-      '',
-      '╭━━━〔 ✦ COMMANDS ✦ 〕━━━╮',
-      ...unique.map(p => {
-        const aliases = Array.isArray(p.aliases) && p.aliases.length ? ' [Aliases: ' + p.aliases.map(a => prefix + a).join(', ') + ']' : '';
-        return '┃ ✧ ' + prefix + p.name + aliases + (p.description ? ' — ' + p.description : '');
-      }),
-      '╰━━━━━━━━━━━━━━━━━━━━━━╯',
-      '⚡ Powered by SOURAJIT VFX'
+      ''
     ];
-    await reply(lines.join('\n'));
+
+    await reply([...header, ...sections, '⚡ Powered by SOURAJIT VFX'].join('\n'));
   }
 };
