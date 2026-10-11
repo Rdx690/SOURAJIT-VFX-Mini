@@ -39,7 +39,10 @@ module.exports = {
       '╰═════════════════⊷',
       '',
       '╭━━━〔 ✦ COMMANDS ✦ 〕━━━╮',
-      ...unique.map(p => '┃ ✧ ' + prefix + p.name + (p.description ? ' — ' + p.description : '')),
+      ...unique.map(p => {
+        const aliases = Array.isArray(p.aliases) && p.aliases.length ? ' [Aliases: ' + p.aliases.map(a => prefix + a).join(', ') + ']' : '';
+        return '┃ ✧ ' + prefix + p.name + aliases + (p.description ? ' — ' + p.description : '');
+      }),
       '╰━━━━━━━━━━━━━━━━━━━━━━╯',
       '⚡ Powered by SOURAJIT VFX'
     ];
