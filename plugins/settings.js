@@ -1,0 +1,1 @@
+module.exports = { name:'settings', aliases:['setting'], description:'Show current bot settings', async execute({reply,botName,prefix}) { await reply('⚙️ ' + botName + '\\nPrefix: ' + prefix + '\\nUse the website dashboard to change your saved settings.'); } };
