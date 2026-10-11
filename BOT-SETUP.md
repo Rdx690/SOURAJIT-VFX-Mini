@@ -30,6 +30,24 @@ This repository contains a WhatsApp bot starter and a separate static landing pa
 | `.lower <text>` | Convert text to lowercase |
 | `.count <text>` | Count characters and words |
 
+## Sayan Nexus music, video and Instagram commands
+
+The bot now calls these configured-in-code HTTPS endpoints:
+
+- `.song <song name>`, `.play <song name>`, `.music <song name>`, `.ytmp3 <song name>` — query the music endpoint and send the returned MP3 URL as WhatsApp audio.
+- `.video <query or URL>`, `.ytmp4 <query or URL>` — query the video endpoint and send the returned MP4 URL as WhatsApp video.
+- `.insta <Instagram URL>`, `.ig <Instagram URL>`, `.igreel <Instagram URL>` — query the Instagram endpoint and send the returned image/video URL.
+
+The code expects a JSON response with `status: "success"` and a direct HTTPS `url` field. Media sending depends on the provider's links still being valid and WhatsApp/Baileys being able to fetch them. The supplied API is an external third-party service, so availability and response format can change; these commands have not been live-tested. Only download content you own or have permission to use.
+
+## Premium menu picture and link
+
+Set these optional values in your private `.env`:
+- `BOT_PICTURE_URL=https://your-hosted-image-url` — optional HTTPS profile/menu image URL.
+- `BOT_SOCIAL_LINK=https://your-link` — link shown in the menu (defaults to this GitHub repository).
+
+No personal picture URL was supplied, so the code supports your own hosted picture but does not invent one.
+
 ## Settings and plugin system
 
 Persistent settings are stored locally in `data/settings.json`; do not commit that runtime data file.
