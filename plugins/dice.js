@@ -1,0 +1,1 @@
+module.exports = { name:'dice', aliases:[], description:'Roll a six-sided dice', async execute({reply}) { await reply('🎲 You rolled: ' + (1+Math.floor(Math.random()*6))); } };
