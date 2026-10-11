@@ -187,7 +187,37 @@ async function startBot() {
             await reply('🔄 Plugin reload complete. Loaded: ' + list.length);
           } else if (command === 'ping') {
             const started = Date.now();
-            await reply(`🏓 Pong!\nResponse: ${Date.now() - started} ms`);
+            const frames = [
+              '╭━━━〔 ⚡ PING SYSTEM 〕━━━╮\n│ ░░░░░░░░░░ 0%\n│ 🔎 Checking connection...\n╰━━━━━━━━━━━━━━━━━━━━╯',
+              '╭━━━〔 ⚡ PING SYSTEM 〕━━━╮\n│ ▰▰▰░░░░░░░ 30%\n│ 📡 Measuring response...\n╰━━━━━━━━━━━━━━━━━━━━╯',
+              '╭━━━〔 ⚡ PING SYSTEM 〕━━━╮\n│ ▰▰▰▰▰▰░░░░ 60%\n│ 🔄 Calculating latency...\n╰━━━━━━━━━━━━━━━━━━━━╯',
+              '╭━━━〔 ⚡ PING SYSTEM 〕━━━╮\n│ ▰▰▰▰▰▰▰▰▰░ 90%\n│ ✨ Finalizing test...\n╰━━━━━━━━━━━━━━━━━━━━╯'
+            ];
+            let pingMessage;
+            try {
+              pingMessage = await sock.sendMessage(jid, { text: frames[0] }, { quoted: message });
+              for (let i = 1; i < frames.length; i++) {
+                await sleep(450);
+                await sock.sendMessage(jid, { text: frames[i], edit: pingMessage.key });
+              }
+              const latency = Date.now() - started;
+              await sock.sendMessage(jid, {
+                text: [
+                  '╭━━━〔 ⚡ SOURAJIT VFX PING 〕━━━╮',
+                  '│',
+                  '│ 🏓 PONG! • CONNECTION ACTIVE',
+                  '│ ⚡ Response: ' + latency + ' ms',
+                  '│ 🟢 Status: ' + (sock.user ? 'ONLINE' : 'CONNECTING'),
+                  '│ ⏱️ Uptime: ' + Math.floor(process.uptime()) + ' sec',
+                  '│',
+                  '╰━━━━━━━━━━━━━━━━━━━━━━━━━━╯',
+                  '✨ Powered by SOURAJIT VFX'
+                ].join('\n'),
+                edit: pingMessage.key
+              });
+            } catch (error) {
+              await reply('🏓 PONG!\n⚡ Response: ' + (Date.now() - started) + ' ms\n🟢 Status: ONLINE');
+            }
           } else if (command === 'alive') {
             await reply(`✅ ${settings.get('botName')} is running.\nPrefix: ${currentPrefix}`);
           } else if (command === 'owner') {
