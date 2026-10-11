@@ -106,6 +106,7 @@ async function handleMessage(uid, sock, message) {
   const jid = message.key.remoteJid;
   if (!jid || jid === 'status@broadcast') return;
   const s = loadSettings(uid);
+  if (s.privateMode && jid.endsWith('@g.us')) return;
   const body = message.message.conversation ||
     message.message.extendedTextMessage?.text ||
     message.message.imageMessage?.caption ||
