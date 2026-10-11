@@ -8,6 +8,7 @@ const pino = require('pino');
 const QRCode = require('qrcode');
 const fs = require('fs');
 const path = require('path');
+const pluginSystem = require('./plugins');
 const {
   default: makeWASocket,
   useMultiFileAuthState,
@@ -140,6 +141,11 @@ async function handleMessage(uid, sock, message) {
   const argText = parts.join(' ');
   const reply = value => safeReply(sock, jid, value, message);
   try {
+    const pluginHandled = await pluginSystem.executePlugin({
+      command, args: parts, prefix: s.prefix, botName: s.botName, reply, sock, message, jid,
+      isOwner: false
+    });
+    if (pluginHandled) return;
     if (['menu', 'help', 'commands'].includes(command)) {
       const menu = [
         '╭─「 ' + s.botName + ' 」',
