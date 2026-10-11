@@ -139,7 +139,7 @@ async function startBot() {
           } else {
             const handled = await commandTools.execute({
               command,
-              args: text.slice(config.PREFIX.length).trim().split(/\\s+/).slice(1),
+              args: text.slice(config.PREFIX.length).trim().split(/\s+/).slice(1),
               prefix: config.PREFIX,
               botName: config.BOT_NAME,
               reply
