@@ -44,7 +44,10 @@ try {
 
 const DATA_DIR = path.resolve(process.env.DATA_DIR || './data');
 const SESSIONS_DIR = path.join(DATA_DIR, 'sessions');
-fs.mkdirSync(SESSIONS_DIR, { recursive: true });
+fs.mkdirSync(SESSIONS_DIR, { recursive: true, mode: 0o700 });
+console.log('[storage] DATA_DIR=' + DATA_DIR);
+console.log('[storage] SESSIONS_DIR=' + SESSIONS_DIR);
+console.log('[storage] For sessions to survive redeploys, mount a persistent Koyeb volume at ' + DATA_DIR + ' and set DATA_DIR to the same path.');
 const sessions = new Map();
 const DEFAULT_SETTINGS = Object.freeze({
   botName: 'SOURAJIT VFX Mini',
@@ -105,6 +108,7 @@ async function handleMessage(uid, sock, message) {
   if (!message?.message || message.key?.fromMe) return;
   const jid = message.key.remoteJid;
   if (!jid || jid === 'status@broadcast') return;
+  console.log('[message] Incoming message received for user session ' + uid + ' from ' + jid + (message.message.conversation || message.message.extendedTextMessage?.text ? ' (text)' : ' (non-text)'));
   const s = loadSettings(uid);
   if (s.privateMode && jid.endsWith('@g.us')) return;
   const body = message.message.conversation ||
@@ -127,7 +131,10 @@ async function handleMessage(uid, sock, message) {
     } catch (e) { console.warn('[antiLink]', e.message); }
     return;
   }
-  if (!text.startsWith(s.prefix)) return;
+  if (!text.startsWith(s.prefix)) {
+    if (text) console.log('[message] Ignored: message does not start with configured prefix "' + s.prefix + '".');
+    return;
+  }
   const parts = text.slice(s.prefix.length).trim().split(/\s+/);
   const command = (parts.shift() || '').toLowerCase();
   const argText = parts.join(' ');
@@ -170,7 +177,7 @@ async function handleMessage(uid, sock, message) {
       await reply('🔒 Private mode is ON.');
     }
   } catch (error) {
-    console.error('[message handler]', error.message);
+    console.error('[message handler] Failed to process/send command reply:', error?.stack || error?.message || error);
   }
 }
 async function startUserSession(uid, phoneNumber) {
@@ -192,7 +199,14 @@ async function startUserSession(uid, phoneNumber) {
     syncFullHistory: false
   });
   entry.sock = sock;
-  sock.ev.on('creds.update', saveCreds);
+  sock.ev.on('creds.update', async () => {
+    try {
+      await saveCreds();
+      console.log('[storage] WhatsApp credentials saved for session ' + uid);
+    } catch (error) {
+      console.error('[storage] Could not save WhatsApp credentials for session ' + uid + ':', error.message);
+    }
+  });
   sock.ev.on('connection.update', async update => {
     const current = sessions.get(uid);
     if (!current || current.sock !== sock) return;
@@ -205,12 +219,14 @@ async function startUserSession(uid, phoneNumber) {
       current.message = 'Connecting to WhatsApp…';
     }
     if (update.connection === 'open') {
+      console.log('[whatsapp] Session connected for user ' + uid);
       current.connection = 'open';
       current.pairingCode = null;
       current.qrDataUrl = null;
       current.message = 'WhatsApp connected successfully.';
     }
     if (update.connection === 'close') {
+      console.warn('[whatsapp] Session closed for user ' + uid + '; status=' + (update.lastDisconnect?.error?.output?.statusCode ?? 'unknown') + '; error=' + (update.lastDisconnect?.error?.message || 'unknown'));
       current.connection = 'close';
       current.message = 'Connection closed. Check session status or reconnect.';
       const statusCode = update.lastDisconnect?.error?.output?.statusCode;
@@ -306,12 +322,20 @@ app.delete('/api/whatsapp/session', async (req, res) => {
 });
 
 async function restoreSessions() {
-  for (const name of fs.readdirSync(SESSIONS_DIR)) {
+  const entries = fs.readdirSync(SESSIONS_DIR);
+  console.log('[storage] Found ' + entries.length + ' stored session directories to inspect.');
+  for (const name of entries) {
     const dir = path.join(SESSIONS_DIR, name);
     if (!/^[A-Za-z0-9_-]{1,128}$/.test(name) || !fs.statSync(dir).isDirectory()) continue;
     if (fs.existsSync(path.join(dir, 'auth', 'creds.json'))) {
-      try { await startUserSession(name); }
-      catch (e) { console.error('[restore session]', e.message); }
+      try {
+        console.log('[storage] Restoring saved WhatsApp session ' + name);
+        await startUserSession(name);
+      } catch (e) {
+        console.error('[restore session] Could not restore ' + name + ':', e.message);
+      }
+    } else {
+      console.log('[storage] No saved creds.json found for session directory ' + name);
     }
   }
 }
