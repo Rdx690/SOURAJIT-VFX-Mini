@@ -14,6 +14,6 @@ module.exports = {
       '┃ ✦ Engine : SOURAJIT VFX',
       '╰══════════════════════╯',
       '⚡ Fast • Stable • Premium'
-    ].join('\\n'));
+    ].join('\n'));
   }
 };
