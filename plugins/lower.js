@@ -1,0 +1,1 @@
+module.exports = { name:'lower', aliases:[], description:'Convert text to lowercase', async execute({reply,args,prefix}) { const s=args.join(' '); await reply(s ? s.toLowerCase() : 'Usage: ' + prefix + 'lower HELLO'); } };
