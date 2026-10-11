@@ -1,0 +1,1 @@
+module.exports = { name:'reverse', aliases:[], description:'Reverse text', async execute({reply,args,prefix}) { const s=args.join(' '); await reply(s ? Array.from(s).reverse().join('') : 'Usage: ' + prefix + 'reverse hello'); } };
