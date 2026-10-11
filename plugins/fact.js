@@ -1,0 +1,1 @@
+module.exports = { name:'fact', aliases:[], description:'Share a random fact', async execute({reply}) { const a=['Octopuses have three hearts.','A group of flamingos is called a flamboyance.','A hexagon has six sides.','The Pacific is the largest ocean on Earth.']; await reply('🧠 ' + a[Math.floor(Math.random()*a.length)]); } };
