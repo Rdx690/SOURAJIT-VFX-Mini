@@ -1,0 +1,19 @@
+{
+  "name": "sourajit-vfx-mini",
+  "version": "1.0.0",
+  "description": "SOURAJIT VFX Mini WhatsApp bot starter",
+  "main": "index.js",
+  "private": false,
+  "scripts": {
+    "start": "node index.js",
+    "check": "node --check index.js && node --check config.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@whiskeysockets/baileys": "latest",
+    "dotenv": "^16.4.7",
+    "pino": "^9.6.0"
+  }
+}
