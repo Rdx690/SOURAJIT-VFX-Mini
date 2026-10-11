@@ -1,8 +1,48 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f7faff"><title>Connect WhatsApp — SOURАJIT VFX Mini</title>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#070b14"><title>Connect WhatsApp — SOURАJIT VFX Mini</title>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--ink:#18243c;--muted:#71809b;--line:#dfe7f4;--cyan:#9beaf0;--violet:#d9d2ff;--pink:#ffe0f1;--green:#087f5b;--bad:#b42345}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 8% 3%,#b7f3f6 0,transparent 34%),radial-gradient(ellipse at 95% 12%,#ded7ff 0,transparent 36%),#f6f8fd;color:var(--ink);font-family:Manrope,system-ui,sans-serif}.wrap{width:min(1000px,calc(100% - 30px));margin:auto}.top{display:flex;align-items:center;justify-content:space-between;padding:20px 0}.brand{display:flex;align-items:center;gap:10px;font-weight:800;text-decoration:none;color:inherit}.logo{width:43px;height:43px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(135deg,#b3f5f7,#d7ccff,#ffd8ee);box-shadow:0 8px 25px #9aade64d}.muted{color:var(--muted);font-size:13px;line-height:1.7}.btn{border:1px solid var(--line);background:#ffffffb8;color:var(--ink);border-radius:13px;padding:12px 15px;font:700 12px Manrope;cursor:pointer}.primary{background:linear-gradient(110deg,#a8eff1,#d4c9ff);border:0}.hero{padding:25px 0}.eyebrow{font-size:11px;letter-spacing:.15em;font-weight:800;color:#657b9c}h1{font-size:clamp(30px,6vw,48px);letter-spacing:-.05em;margin:10px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.card{background:#ffffffb8;backdrop-filter:blur(22px);border:1px solid #ffffffde;border-radius:24px;padding:24px;box-shadow:0 20px 65px #aab8d329;min-width:0}.card h2{font-size:18px;margin:0 0 8px}.label{display:block;font-size:12px;font-weight:700;margin:16px 0 7px}input{width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:#ffffffdb;color:var(--ink);font:13px Manrope;outline:none}input:focus{border-color:#93c9e7;box-shadow:0 0 0 3px #b7e8f555}.row{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}.status{font-size:12px;min-height:24px;margin-top:12px;color:var(--muted)}.status.good{color:var(--green)}.status.bad{color:var(--bad)}.qrbox{display:grid;place-items:center;min-height:290px;border:1px dashed #cbd5e5;border-radius:18px;background:#ffffff9c;padding:15px;margin-top:14px}.qrbox img{width:min(100%,270px);border-radius:10px}.code{font-size:30px;letter-spacing:.18em;font-weight:800;text-align:center;overflow-wrap:anywhere}.toggle{display:flex;justify-content:space-between;gap:15px;align-items:center;padding:13px 0;border-bottom:1px solid #e7edf5;font-size:13px;font-weight:700}.toggle input{width:19px;height:19px;accent-color:#7c85d9}.foot{padding:25px 0 35px;color:var(--muted);font-size:11px}.hidden{display:none!important}@media(max-width:720px){.grid{grid-template-columns:1fr}.card{padding:19px}}
+:root{color-scheme:dark;--ink:#eef5ff;--muted:#94a3bd;--line:#26354f;--cyan:#67f5ff;--violet:#a78bfa;--pink:#fb7185;--green:#34d399;--bad:#fb7185}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;overflow-x:hidden;background:radial-gradient(ellipse at 10% 0%,#123c51 0,transparent 36%),radial-gradient(ellipse at 100% 12%,#30245d 0,transparent 38%),radial-gradient(ellipse at 50% 100%,#102c42 0,transparent 44%),#070b14;color:var(--ink);font-family:Manrope,system-ui,sans-serif}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.22;background-image:linear-gradient(#9bbcff0b 1px,transparent 1px),linear-gradient(90deg,#9bbcff0b 1px,transparent 1px);background-size:32px 32px;mask-image:linear-gradient(to bottom,#000,transparent 90%)}
+.wrap{width:min(1060px,calc(100% - 30px));margin:auto;position:relative}
+.top{display:flex;align-items:center;justify-content:space-between;padding:20px 0;gap:14px}
+.brand{display:flex;align-items:center;gap:11px;font-weight:800;text-decoration:none;color:inherit;letter-spacing:.04em}
+.logo{width:45px;height:45px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(135deg,#67f5ff,#9f8cff 58%,#fb7185);color:#08111d;box-shadow:0 0 28px #67f5ff25;font-weight:900}
+.muted{color:var(--muted);font-size:13px;line-height:1.75}
+.btn{border:1px solid #30415f;background:#101a2b;color:#eaf4ff;border-radius:13px;padding:12px 15px;font:700 12px Manrope;cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .2s,background .2s}
+.btn:hover{transform:translateY(-2px);border-color:#67f5ff99;box-shadow:0 8px 24px #0005}
+.btn:active{transform:scale(.98)}
+.btn:disabled{opacity:.55;cursor:wait;transform:none}
+.primary{background:linear-gradient(110deg,#67f5ff,#a78bfa);color:#08111d;border:0;box-shadow:0 6px 22px #67f5ff19}
+.hero{padding:28px 0 22px;animation:rise .65s ease both}
+.eyebrow{font-size:11px;letter-spacing:.19em;font-weight:800;color:var(--cyan)}
+h1{font-size:clamp(32px,6vw,54px);letter-spacing:-.055em;line-height:1.08;margin:12px 0;background:linear-gradient(100deg,#f4fbff 10%,#83f3ff 48%,#c6a9ff 85%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:17px;align-items:start}
+.card{position:relative;overflow:hidden;background:linear-gradient(145deg,#111d30ed,#0b1322f2);backdrop-filter:blur(22px);border:1px solid #293955;border-radius:25px;padding:24px;box-shadow:0 22px 75px #0004;min-width:0;animation:rise .7s ease both}
+.card:nth-child(2){animation-delay:.12s}
+.card:before{content:"";position:absolute;left:24px;right:24px;top:0;height:1px;background:linear-gradient(90deg,transparent,#67f5ff99,#a78bfa88,transparent)}
+.card h2{font-size:18px;margin:0 0 8px;letter-spacing:-.02em}
+.label{display:block;font-size:12px;font-weight:700;margin:16px 0 7px;color:#d8e5f8}
+input{width:100%;padding:13px 14px;border:1px solid #2b3b56;border-radius:13px;background:#080f1c;color:#f3f8ff;font:13px Manrope;outline:none;transition:border-color .2s,box-shadow .2s}
+input::placeholder{color:#687995}
+input:focus{border-color:#67f5ff;box-shadow:0 0 0 3px #67f5ff17}
+.row{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}
+.status{font-size:12px;min-height:24px;margin-top:12px;color:var(--muted);overflow-wrap:anywhere}
+.status.good{color:var(--green)}.status.bad{color:var(--bad)}
+.qrbox{display:grid;place-items:center;gap:12px;min-height:290px;border:1px dashed #354b6c;border-radius:19px;background:radial-gradient(ellipse at 50% 0%,#67f5ff0d,transparent 65%),#080f1c;padding:18px;margin-top:14px;transition:border-color .25s,background .25s}
+.qrbox:has(.code:not(.hidden)),.qrbox:has(img:not(.hidden)){border-color:#67f5ff80;background-color:#0b1726}
+.qrbox img{width:min(100%,270px);border-radius:12px;background:#fff;padding:8px;box-shadow:0 0 36px #67f5ff15;animation:pop .3s ease}
+.code{font-size:clamp(24px,5vw,34px);letter-spacing:.12em;font-weight:800;text-align:center;overflow-wrap:anywhere;color:var(--cyan);text-shadow:0 0 24px #67f5ff30;animation:pop .3s ease}
+.toggle{display:flex;justify-content:space-between;gap:15px;align-items:center;padding:13px 0;border-bottom:1px solid #26354b;font-size:13px;font-weight:700;color:#dce8f8}
+.toggle input{width:19px;height:19px;accent-color:#67f5ff;flex:0 0 auto}
+.foot{padding:25px 0 35px;color:#6f809b;font-size:11px;text-align:center}
+.hidden{display:none!important}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pop{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:scale(1)}}
+@media(max-width:720px){.grid{grid-template-columns:1fr}.card{padding:19px}.hero{padding-top:18px}.top{padding:15px 0}.row .btn{flex:1}.qrbox{min-height:250px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
 </style></head><body><header class="wrap top"><a class="brand" href="index.html"><span class="logo">SV</span><span>SOURAJIT VFX MINI<div class="muted" style="font-size:10px">PERSONAL WHATSAPP SPACE</div></span></a><button class="btn" id="logout">Log out</button></header>
 <main class="wrap"><section class="hero"><div class="eyebrow">SECURE ACCOUNT · PERSONAL SESSION</div><h1>Connect your WhatsApp.</h1><p class="muted">Your session and settings are isolated to your signed-in Firebase account. Only connect an account you own or are authorized to manage.</p></section>
 <div class="grid"><section class="card"><h2>01 / Pair device</h2><p class="muted">Choose a pairing code or QR. Never share your code or QR with anyone.</p><label class="label" for="phone">Phone number with country code (pairing code only)</label><input id="phone" inputmode="numeric" autocomplete="tel" placeholder="91XXXXXXXXXX"><div class="row"><button class="btn primary" id="pair">Generate pairing code</button><button class="btn" id="qr">Generate QR</button></div><div class="status" id="connectStatus" role="status" aria-live="polite">Checking sign-in…</div><div class="qrbox"><div id="qrPlaceholder" class="muted">Your QR code or pairing code will appear here.</div><img id="qrImage" class="hidden" alt="WhatsApp linking QR code"><div id="pairCode" class="code hidden"></div></div><div class="row"><button class="btn" id="refresh">Refresh status</button><button class="btn" id="disconnect">Disconnect WhatsApp</button></div><p class="muted">In WhatsApp: Linked devices → Link a device. For a pairing code, choose “Link with phone number” and enter the code.</p></section>
