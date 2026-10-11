@@ -1,0 +1,1 @@
+module.exports = { name:'alive', aliases:['online'], description:'Show bot online status', async execute({reply,botName}) { await reply('✅ ' + botName + ' is online and ready.'); } };
