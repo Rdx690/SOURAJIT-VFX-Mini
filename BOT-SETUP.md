@@ -30,6 +30,22 @@ This repository contains a WhatsApp bot starter and a separate static landing pa
 | `.lower <text>` | Convert text to lowercase |
 | `.count <text>` | Count characters and words |
 
+## Downloader commands
+
+The following commands are wired to a configurable external HTTPS API adapter:
+
+- `.ytmp3 <YouTube URL>`
+- `.ytmp4 <YouTube URL>`
+- `.tiktok <TikTok URL>`
+- `.ig <Instagram URL>` / `.igreel <Instagram URL>`
+- `.facebook <Facebook URL>`
+- `.spotify <Spotify URL>`
+- `.pinterest <Pinterest URL>`
+
+Configure `DOWNLOAD_API_URL` in your private `.env`. The provider must accept a `url` query parameter and return JSON containing a direct URL in a common field such as `download`, `downloadUrl`, `download_url`, or `url` (or corresponding `data`/`result` fields). The adapter passes a `platform` query parameter too. Provider response formats vary; test against your provider. Without a provider URL, the bot explains that setup is missing instead of inventing a link. These commands return a provider link; they do not upload the media file into WhatsApp.
+
+Only use content you own or have permission to download, and respect each platform's terms.
+
 ## Setup
 
 1. Copy `.env.example` to `.env` on your host.
