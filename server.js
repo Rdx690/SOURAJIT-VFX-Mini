@@ -106,9 +106,14 @@ function safeReply(sock, jid, text, quoted) {
   return sock.sendMessage(jid, { text: String(text).slice(0, 3500) }, quoted ? { quoted } : {});
 }
 async function handleMessage(uid, sock, message) {
-  if (!message?.message || message.key?.fromMe) return;
+  if (!message?.message) return;
   const jid = message.key.remoteJid;
   if (!jid || jid === 'status@broadcast') return;
+  // Allow commands typed in WhatsApp's own-number chat, but ignore this bot's outgoing messages in every other chat.
+  const ownNumber = String(sock.user?.id || '').split(':')[0].split('@')[0];
+  const chatNumber = String(jid).split('@')[0];
+  const isSelfChat = Boolean(ownNumber && chatNumber === ownNumber && !jid.endsWith('@g.us'));
+  if (message.key?.fromMe && !isSelfChat) return;
   console.log('[message] Incoming message received for user session ' + uid + ' from ' + jid + (message.message.conversation || message.message.extendedTextMessage?.text ? ' (text)' : ' (non-text)'));
   const s = loadSettings(uid);
   if (s.privateMode && jid.endsWith('@g.us')) return;
@@ -249,7 +254,8 @@ async function startUserSession(uid, phoneNumber) {
     }
   });
   sock.ev.on('messages.upsert', async ({ messages, type }) => {
-    if (type !== 'notify') return;
+    // Personal-number self-chat commands may arrive as append; ordinary incoming messages arrive as notify.
+    if (type !== 'notify' && type !== 'append') return;
     for (const message of messages) await handleMessage(uid, sock, message);
   });
   sock.ev.on('group-participants.update', async update => {
