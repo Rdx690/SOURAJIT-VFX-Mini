@@ -1,0 +1,1 @@
+module.exports = { name:'upper', aliases:[], description:'Convert text to uppercase', async execute({reply,args,prefix}) { const s=args.join(' '); await reply(s ? s.toUpperCase() : 'Usage: ' + prefix + 'upper hello'); } };
