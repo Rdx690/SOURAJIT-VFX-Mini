@@ -1,0 +1,1 @@
+module.exports = { name:'quote', aliases:[], description:'Share an inspirational quote', async execute({reply}) { const a=['Dream big. Start small. Keep going. ✨','Consistency beats motivation. 💫','Your future is shaped by what you do today. 🌟']; await reply('💭 ' + a[Math.floor(Math.random()*a.length)]); } };
