@@ -41,6 +41,13 @@ function getHelp(prefix) {
   return [
     '╭─「 SOURAJIT VFX COMMANDS 」',
     '│ GENERAL',
+    `│ ${prefix}settings — Show settings (owner)`,
+    `│ ${prefix}plugins — List plugins (owner)`,
+    `│ ${prefix}pluginreload — Reload plugins (owner)`,
+    `│ ${prefix}setprefix <symbol> — Change prefix`,
+    `│ ${prefix}setname <name> — Change bot name`,
+    `│ ${prefix}autoread on/off — Toggle auto-read`,
+    `│ ${prefix}public / private — Save mode setting`,
     `│ ${prefix}menu, help, commands`,
     `│ ${prefix}ping, alive, runtime, info`,
     `│ ${prefix}owner, repo, date, time`,
