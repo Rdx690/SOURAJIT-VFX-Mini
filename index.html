@@ -1,164 +1,87 @@
 <!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#080812">
-  <meta name="description" content="VFX AI MINI — a premium neon WhatsApp bot dashboard by Sourajit VFX.">
-  <title>VFX AI MINI — Next Level Automation</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    /* Premium website-opening intro */
-    html.intro-lock,html.intro-lock body{overflow:hidden}
-    .intro-screen{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;overflow:hidden;background:#060812;transition:opacity .75s ease,visibility .75s ease}
-    .intro-screen:before,.intro-screen:after{content:"";position:absolute;width:min(76vw,520px);aspect-ratio:1;border:1px solid #69f4ff35;border-radius:50%;animation:intro-orbit 7s linear infinite}
-    .intro-screen:after{width:min(58vw,390px);border-color:#a18aff45;animation-direction:reverse;animation-duration:5s}
-    .intro-screen.is-gone{opacity:0;visibility:hidden;pointer-events:none}
-    .intro-content{position:relative;z-index:1;text-align:center;padding:24px;animation:intro-rise 1s cubic-bezier(.2,.8,.2,1) both}
-    .intro-mark{width:88px;height:88px;margin:0 auto 24px;display:grid;place-items:center;border-radius:27px;background:linear-gradient(135deg,#69f4ff,#a18aff 58%,#ff72cb);color:#070b14;font-size:29px;font-weight:900;box-shadow:0 0 28px #69f4ff40,0 0 90px #a18aff26;animation:intro-pulse 2s ease-in-out infinite}
-    .intro-overline{font:10px 'DM Mono',monospace;letter-spacing:.3em;color:#69f4ff;text-transform:uppercase}
-    .intro-title{font:800 clamp(27px,6vw,45px)/1.1 Manrope,system-ui,sans-serif;letter-spacing:-.06em;margin:13px 0 10px;color:#f7f7ff}
-    .intro-title span{background:linear-gradient(100deg,#69f4ff,#b7a4ff,#ff72cb);-webkit-background-clip:text;background-clip:text;color:transparent}
-    .intro-sub{font:11px 'DM Mono',monospace;color:#8f9ab8;letter-spacing:.12em}
-    .intro-track{width:min(230px,65vw);height:3px;margin:26px auto 0;background:#ffffff12;border-radius:9px;overflow:hidden}
-    .intro-track span{display:block;height:100%;width:35%;border-radius:9px;background:linear-gradient(90deg,#69f4ff,#a18aff,#ff72cb);animation:intro-load 1.35s ease-in-out forwards}
-    @keyframes intro-rise{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
-    @keyframes intro-orbit{to{transform:rotate(360deg) scale(1.04)}}
-    @keyframes intro-pulse{0%,100%{transform:scale(1);box-shadow:0 0 28px #69f4ff40,0 0 90px #a18aff26}50%{transform:scale(1.05);box-shadow:0 0 40px #69f4ff70,0 0 110px #a18aff45}}
-    @keyframes intro-load{to{width:100%}}
-    @media(prefers-reduced-motion:reduce){.intro-screen,.intro-screen:before,.intro-screen:after,.intro-content,.intro-mark,.intro-track span{animation:none!important;transition:none!important}.intro-track span{width:100%}}
-    :root{--bg:#080812;--panel:rgba(18,19,39,.72);--line:rgba(255,255,255,.11);--text:#f7f7ff;--muted:#a4a8c3;--cyan:#69f4ff;--violet:#a18aff;--pink:#ff72cb;--green:#9effc4}
-    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:Manrope,system-ui,sans-serif;overflow-x:hidden}
-    body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-2;background:radial-gradient(ellipse at 15% 10%,rgba(105,244,255,.13),transparent 32%),radial-gradient(ellipse at 86% 23%,rgba(161,138,255,.16),transparent 33%),radial-gradient(ellipse at 55% 90%,rgba(255,114,203,.10),transparent 35%)}
-    body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;opacity:.13;background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);background-size:48px 48px;mask-image:linear-gradient(to bottom,black,transparent 82%)}
-    a{color:inherit;text-decoration:none}.wrap{width:min(1120px,calc(100% - 40px));margin:auto}.nav{height:82px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.07)}
-    .brand{display:flex;gap:11px;align-items:center;font-weight:800;letter-spacing:.04em}.logo{width:39px;height:39px;border-radius:13px;display:grid;place-items:center;color:#071018;font-weight:900;background:linear-gradient(135deg,var(--cyan),var(--violet) 55%,var(--pink));box-shadow:0 0 28px rgba(105,244,255,.22)}
-    .brand small{display:block;color:var(--muted);font-size:10px;letter-spacing:.22em;margin-top:2px}.links{display:flex;gap:28px;color:#c5c7df;font-size:13px}.links a:hover{color:var(--cyan)}.nav-cta,.btn{border:1px solid rgba(105,244,255,.38);background:rgba(105,244,255,.08);border-radius:12px;padding:12px 16px;font-size:12px;font-weight:800;letter-spacing:.03em;transition:.2s}.nav-cta:hover,.btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(105,244,255,.13)}
-    .hero{padding:95px 0 78px;display:grid;grid-template-columns:1.1fr .9fr;gap:55px;align-items:center}.eyebrow{display:inline-flex;align-items:center;gap:9px;border:1px solid var(--line);background:rgba(255,255,255,.035);border-radius:100px;padding:9px 13px;color:#d5d8f1;font:11px 'DM Mono',monospace;letter-spacing:.08em}.dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 12px var(--green)}
-    h1{font-size:clamp(42px,6vw,76px);line-height:1.02;letter-spacing:-.065em;margin:23px 0 19px;font-weight:800}.gradient{background:linear-gradient(100deg,var(--cyan),#b7a4ff 48%,var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}.lead{color:var(--muted);font-size:16px;line-height:1.85;max-width:570px}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}.btn.primary{color:#071018;border:0;background:linear-gradient(110deg,var(--cyan),#b9b0ff);box-shadow:0 8px 30px rgba(105,244,255,.15)}.btn.secondary{border-color:var(--line);background:rgba(255,255,255,.035)}
-    .stats{display:flex;gap:27px;flex-wrap:wrap;margin-top:38px}.stat strong{display:block;font-size:19px}.stat span{font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
-    .visual{position:relative;min-height:420px;display:grid;place-items:center}.orb{position:absolute;width:310px;height:310px;border-radius:50%;background:radial-gradient(circle at 35% 25%,rgba(105,244,255,.24),rgba(161,138,255,.13) 40%,rgba(255,114,203,.05) 65%,transparent 70%);filter:blur(2px);box-shadow:0 0 90px rgba(105,244,255,.10)}.ring{position:absolute;width:340px;height:340px;border:1px solid rgba(105,244,255,.22);border-radius:50%;transform:rotateX(67deg) rotateZ(-20deg)}.ring.two{width:285px;height:285px;border-color:rgba(255,114,203,.24);transform:rotateX(67deg) rotateZ(42deg)}
-    .terminal{position:relative;width:min(100%,390px);border:1px solid rgba(255,255,255,.14);background:rgba(12,13,29,.85);backdrop-filter:blur(20px);border-radius:20px;overflow:hidden;box-shadow:0 28px 90px rgba(0,0,0,.45),0 0 45px rgba(105,244,255,.07);transform:rotateY(-5deg) rotateX(2deg)}
-    .term-head{padding:15px 17px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:7px;color:#a8acc7;font:11px 'DM Mono',monospace}.ball{width:8px;height:8px;border-radius:50%;background:#ff7185}.ball:nth-child(2){background:#ffd66e}.ball:nth-child(3){background:#6fffb2}.term-title{margin-left:auto}.term-body{padding:22px 21px 24px;font:12px/2 'DM Mono',monospace;color:#b7bdd9}.term-body .cyan{color:var(--cyan)}.term-body .pink{color:var(--pink)}.term-body .green{color:var(--green)}.term-body .dim{color:#6f769c}.status{display:flex;justify-content:space-between;align-items:center;margin-top:18px;padding:12px;border-radius:11px;background:rgba(158,255,196,.06);border:1px solid rgba(158,255,196,.16);color:var(--green);font-size:10px}
-    section{padding:70px 0}.section-top{display:flex;align-items:end;justify-content:space-between;gap:25px;margin-bottom:27px}.kicker{font:11px 'DM Mono',monospace;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan)}h2{font-size:clamp(28px,4vw,42px);letter-spacing:-.045em;margin:10px 0 0}.section-desc{max-width:390px;color:var(--muted);font-size:13px;line-height:1.8}
-    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.card{position:relative;border:1px solid var(--line);background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.018));border-radius:18px;padding:23px;overflow:hidden;transition:.25s}.card:hover{transform:translateY(-4px);border-color:rgba(105,244,255,.35)}.icon{width:43px;height:43px;border:1px solid rgba(105,244,255,.2);background:rgba(105,244,255,.07);border-radius:13px;display:grid;place-items:center;font-size:20px}.card h3{font-size:16px;margin:18px 0 8px}.card p{font-size:12px;line-height:1.8;color:var(--muted);margin:0}.tag{display:inline-block;margin-top:16px;color:var(--cyan);font:10px 'DM Mono',monospace}
-    .command-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.command{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 17px;border:1px solid var(--line);background:rgba(255,255,255,.025);border-radius:13px}.command code{font:12px 'DM Mono',monospace;color:var(--cyan)}.command span{font-size:11px;color:var(--muted)}.copy{cursor:pointer;border:1px solid var(--line);border-radius:8px;background:rgba(255,255,255,.04);color:#dfe3ff;padding:7px 9px;font:10px 'DM Mono',monospace}
-    .setup{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.stepnum{font:11px 'DM Mono',monospace;color:var(--pink)}.step h3{margin:12px 0 8px}.step p{font-size:12px;line-height:1.8;color:var(--muted)}.step code{color:var(--cyan);font:11px 'DM Mono',monospace;overflow-wrap:anywhere}
-    .banner{padding:35px;border:1px solid rgba(161,138,255,.28);border-radius:22px;background:radial-gradient(ellipse at 0% 0%,rgba(105,244,255,.1),transparent 45%),linear-gradient(120deg,rgba(161,138,255,.08),rgba(255,114,203,.06));display:flex;align-items:center;justify-content:space-between;gap:25px}.banner p{margin:8px 0 0;color:var(--muted);font-size:13px;line-height:1.8}.footer{border-top:1px solid var(--line);padding:26px 0 35px;display:flex;justify-content:space-between;gap:18px;color:var(--muted);font-size:11px}.footer b{color:#e9eaff}
-    .menu-toggle{display:none;background:none;border:1px solid var(--line);color:white;border-radius:9px;padding:9px}
-    @media(max-width:800px){.hero{grid-template-columns:1fr;padding-top:65px;gap:20px}.visual{min-height:390px}.grid{grid-template-columns:repeat(2,1fr)}.section-top{align-items:start;flex-direction:column}.links{gap:15px}.nav-cta{display:none}}
-    @media(max-width:560px){.wrap{width:min(100% - 28px,1120px)}.nav{height:70px}.menu-toggle{display:block}.links{display:none;position:absolute;top:69px;left:14px;right:14px;z-index:10;padding:18px;background:#101126;border:1px solid var(--line);border-radius:14px;flex-direction:column}.links.open{display:flex}.hero{padding:55px 0 35px}h1{font-size:48px}.lead{font-size:14px}.visual{min-height:340px}.orb{width:250px;height:250px}.ring{width:270px;height:270px}.ring.two{width:225px;height:225px}.terminal{transform:none}.grid,.command-grid,.setup{grid-template-columns:1fr}.banner{padding:25px;align-items:start;flex-direction:column}.stats{gap:18px}.footer{flex-direction:column}}
-    @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
-  </style>
-</head>
-<body>
-<div class="intro-screen" id="introScreen" role="status" aria-label="Loading VFX AI MINI">
-  <div class="intro-content">
-    <div class="intro-mark">SV</div>
-    <div class="intro-overline">Mini Automation Lab</div>
-    <div class="intro-title">VFX <span>AI MINI</span></div>
-    <div class="intro-sub">INITIALIZING EXPERIENCE...</div>
-    <div class="intro-track"><span></span></div>
-  </div>
-</div>
-<header class="wrap nav">
-  <a class="brand" href="#home" aria-label="VFX AI MINI home"><span class="logo">VFX</span><span>VFX AI MINI<small>POWERED BY SOURAJIT VFX</small></span></a>
-  <nav class="links" id="navlinks"><a href="#features">Features</a><a href="#commands">Commands</a><a href="#setup">Setup</a><a href="#about">About</a><a href="dashboard.html">Dashboard</a><a href="connect.html">Connect WhatsApp</a></nav>
-  <a class="nav-cta" href="auth.html" style="margin-right:10px">LOGIN / REGISTER ↗</a>
-  <a class="nav-cta" href="https://github.com/Rdx690/SOURAJIT-VFX-Mini" target="_blank" rel="noreferrer">VIEW GITHUB ↗</a>
-  <button class="menu-toggle" id="menubtn" aria-label="Toggle navigation" aria-expanded="false">☰</button>
-</header>
-<main id="home">
-  <div class="wrap hero">
-    <div>
-      <div class="eyebrow"><span class="dot"></span> BUILT FOR THE NEXT WAVE</div>
-      <h1>Make your<br>WhatsApp feel<br><span class="gradient">next level.</span></h1>
-      <p class="lead">Meet <b>𝐒ꭷᴜʀᴀᴊɪᴛ メ 𝐕𝐅𝐗 Mini</b> — a stylish bot project concept with a clean command experience, modular features, and a premium neon interface.</p>
-      <div class="actions"><a class="btn primary" href="auth.html">LOGIN / REGISTER ↗</a><a class="btn secondary" href="dashboard.html">OPEN DASHBOARD ↗</a><a class="btn secondary" href="#features">EXPLORE FEATURES ↘</a></div>
-      <div class="stats"><div class="stat"><strong>01 <span style="color:var(--cyan)">/</span></strong><span>Clean interface</span></div><div class="stat"><strong>24/7*</strong><span>Host dependent</span></div><div class="stat"><strong>Modular</strong><span>Project approach</span></div></div>
-    </div>
-    <div class="visual" aria-label="Decorative terminal illustration"><div class="orb"></div><div class="ring"></div><div class="ring two"></div>
-      <div class="terminal"><div class="term-head"><i class="ball"></i><i class="ball"></i><i class="ball"></i><span class="term-title">sourajit-vfx / terminal</span></div><div class="term-body">
-        <div class="dim"># initialize your experience</div><div><span class="pink">const</span> bot = <span class="cyan">"SOURAJIT-VFX"</span>;</div><div><span class="pink">const</span> prefix = <span class="green">"."</span>;</div><br><div><span class="dim">›</span> loading modules<span class="cyan">...</span></div><div><span class="dim">›</span> interface <span class="green">ready</span></div><div><span class="dim">›</span> security-first setup</div><div class="status"><span>● PROJECT STATUS</span><span>PAIRING DASHBOARD READY</span></div>
-      </div></div>
-    </div>
-  </div>
-  <section id="features"><div class="wrap"><div class="section-top"><div><div class="kicker">01 / THE EXPERIENCE</div><h2>Built to look different.</h2></div><p class="section-desc">A responsive landing page with a dark glass aesthetic, neon accents, and simple navigation — designed to look great on mobile and desktop.</p></div>
-    <div class="grid">
-      <article class="card"><div class="icon">✦</div><h3>Premium Visuals</h3><p>Gradient typography, soft glows, glass panels, and a custom terminal-inspired hero section.</p><span class="tag">DESIGN / 001</span></article>
-      <article class="card"><div class="icon">⌘</div><h3>Command Showcase</h3><p>A clear place to present bot commands and let visitors copy examples with one tap.</p><span class="tag">UTILITY / 002</span></article>
-      <article class="card"><div class="icon">▣</div><h3>Mobile First</h3><p>Responsive layout, touch-friendly controls, and a compact navigation menu for small screens.</p><span class="tag">RESPONSIVE / 003</span></article>
-      <article class="card"><div class="icon">⛨</div><h3>Security Mindset</h3><p>Documentation encourages private credentials, safe session handling, and owner-controlled pairing.</p><span class="tag">SAFETY / 004</span></article>
-      <article class="card"><div class="icon">⌁</div><h3>Easy to Customize</h3><p>Keep the site in one HTML file. Update copy, links, colors, and sections without a build step.</p><span class="tag">CUSTOM / 005</span></article>
-      <article class="card"><div class="icon">↗</div><h3>GitHub Ready</h3><p>Publish this static website with GitHub Pages after enabling Pages in repository settings.</p><span class="tag">DEPLOY / 006</span></article>
-    </div>
-  </div></section>
-  <section id="commands"><div class="wrap"><div class="section-top"><div><div class="kicker">02 / QUICK COMMANDS</div><h2>Your command board.</h2></div><p class="section-desc">Example commands for the website preview only. Actual bot commands depend on the source code you install.</p></div>
-    <div class="command-grid">
-      <div class="command"><div><code>.menu</code><br><span>Show available commands</span></div><button class="copy" data-copy=".menu">COPY</button></div>
-      <div class="command"><div><code>.ping</code><br><span>Check response latency</span></div><button class="copy" data-copy=".ping">COPY</button></div>
-      <div class="command"><div><code>.help</code><br><span>Get help and usage</span></div><button class="copy" data-copy=".help">COPY</button></div>
-      <div class="command"><div><code>.owner</code><br><span>View owner information</span></div><button class="copy" data-copy=".owner">COPY</button></div>
-    </div>
-  </div></section>
-  <section id="setup"><div class="wrap"><div class="section-top"><div><div class="kicker">03 / GO LIVE</div><h2>Three steps to publish.</h2></div><p class="section-desc">This is a static website, so you do not need Node.js or a backend to host the landing page.</p></div>
-    <div class="setup">
-      <article class="card step"><span class="stepnum">STEP 01 — FILES</span><h3>Keep index.html</h3><p>Commit this file to the root of your <code>SOURAJIT-VFX-Mini</code> repository.</p></article>
-      <article class="card step"><span class="stepnum">STEP 02 — PAGES</span><h3>Enable GitHub Pages</h3><p>Open Settings → Pages. Choose <code>Deploy from a branch</code>, select <code>main</code> and <code>/(root)</code>, then save.</p></article>
-      <article class="card step"><span class="stepnum">STEP 03 — LIVE</span><h3>Visit your site</h3><p>GitHub will show the published URL in Pages settings after deployment completes. A short wait may be needed.</p></article>
-    </div>
-  </div></section>
-  <section id="about"><div class="wrap"><div class="banner"><div><div class="kicker">04 / MADE TO STAND OUT</div><h2>Build your own vibe.</h2><p>VFX AI MINI brings together the neon landing page, Firebase sign-in, personal dashboard, and WhatsApp pairing interface. The Baileys API runs as a separate persistent service.</p></div><a class="btn primary" href="https://github.com/Rdx690/SOURAJIT-VFX-Mini" target="_blank" rel="noreferrer">EXPLORE ON GITHUB ↗</a></div></div></section>
-</main>
-<footer class="wrap footer"><div>© <span id="year"></span> <b>SOURAJIT VFX</b> · VFX AI MINI</div><div>Designed with neon energy. Use responsibly.</div></footer>
-<script>
-  document.documentElement.classList.add('intro-lock');
-  (() => {
-    const screen = document.getElementById('introScreen');
-    const started = Date.now();
-    const hideIntro = () => {
-      const remaining = Math.max(0, 1450 - (Date.now() - started));
-      setTimeout(() => {
-        screen.classList.add('is-gone');
-        document.documentElement.classList.remove('intro-lock');
-        setTimeout(() => screen.remove(), 800);
-      }, remaining);
-    };
-    if (document.readyState === 'complete') hideIntro();
-    else window.addEventListener('load', hideIntro, { once: true });
-    setTimeout(hideIntro, 2600);
-  })();
-  const menuButton = document.getElementById('menubtn');
-  const nav = document.getElementById('navlinks');
-  menuButton.addEventListener('click', () => {
-    const open = nav.classList.toggle('open');
-    menuButton.setAttribute('aria-expanded', String(open));
-  });
-  nav.querySelectorAll('a').forEach(link => link.addEventListener('click', () => {
-    nav.classList.remove('open');
-    menuButton.setAttribute('aria-expanded', 'false');
-  }));
-  document.querySelectorAll('[data-copy]').forEach(button => button.addEventListener('click', async () => {
-    const value = button.getAttribute('data-copy');
-    try {
-      await navigator.clipboard.writeText(value);
-      button.textContent = 'COPIED';
-    } catch {
-      const field = document.createElement('textarea');
-      field.value = value;
-      field.style.position = 'fixed';
-      field.style.opacity = '0';
-      document.body.appendChild(field);
-      field.select();
-      try { document.execCommand('copy'); button.textContent = 'COPIED'; }
-      catch { button.textContent = value; }
-      field.remove();
-    }
-    setTimeout(() => button.textContent = 'COPY', 1400);
-  }));
-  document.getElementById('year').textContent = new Date().getFullYear();
-</script>
-</body>
-</html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#070b14"><title>VFX AI MINI — Home & WhatsApp Pairing</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--ink:#eef5ff;--muted:#94a3bd;--line:#26354f;--cyan:#67f5ff;--violet:#a78bfa;--pink:#fb7185;--green:#34d399;--bad:#fb7185}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;overflow-x:hidden;background:radial-gradient(ellipse at 10% 0%,#123c51 0,transparent 36%),radial-gradient(ellipse at 100% 12%,#30245d 0,transparent 38%),radial-gradient(ellipse at 50% 100%,#102c42 0,transparent 44%),#070b14;color:var(--ink);font-family:Manrope,system-ui,sans-serif}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.22;background-image:linear-gradient(#9bbcff0b 1px,transparent 1px),linear-gradient(90deg,#9bbcff0b 1px,transparent 1px);background-size:32px 32px;mask-image:linear-gradient(to bottom,#000,transparent 90%)}
+.wrap{width:min(1060px,calc(100% - 30px));margin:auto;position:relative}
+.top{display:flex;align-items:center;justify-content:space-between;padding:20px 0;gap:14px}
+.brand{display:flex;align-items:center;gap:11px;font-weight:800;text-decoration:none;color:inherit;letter-spacing:.04em}
+.logo{width:45px;height:45px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(135deg,#ff2c91,#a78bfa 52%,#22d3ee);color:#08111d;box-shadow:0 0 28px #ec489944;font-weight:900}
+.muted{color:var(--muted);font-size:13px;line-height:1.75}
+.btn{border:1px solid #30415f;background:#101a2b;color:#eaf4ff;border-radius:13px;padding:12px 15px;font:700 12px Manrope;cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .2s,background .2s}
+.btn:hover{transform:translateY(-2px);border-color:#67f5ff99;box-shadow:0 8px 24px #0005}
+.btn:active{transform:scale(.98)}
+.btn:disabled{opacity:.55;cursor:wait;transform:none}
+.primary{background:linear-gradient(110deg,#ff2c91,#a78bfa 52%,#22d3ee);background-size:180% 100%;color:#080d17;border:0;box-shadow:0 6px 25px #ec489932;transition:background-position .35s,transform .2s,box-shadow .2s}\n.primary:hover{background-position:100% 0;box-shadow:0 8px 30px #22d3ee30}
+.hero{padding:28px 0 22px;animation:rise .65s ease both}
+.eyebrow{font-size:11px;letter-spacing:.19em;font-weight:800;color:var(--cyan)}
+h1{font-size:clamp(32px,6vw,54px);letter-spacing:-.055em;line-height:1.08;margin:12px 0;background:linear-gradient(100deg,#f4fbff 5%,#ff8acb 35%,#83f3ff 68%,#c6a9ff 90%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:17px;align-items:start}
+.card{position:relative;isolation:isolate;overflow:hidden;background:linear-gradient(145deg,#111d30ed,#0b1322f2);backdrop-filter:blur(22px);border:1px solid #293955;border-radius:25px;padding:24px;box-shadow:0 22px 75px #0004,0 0 34px #ec489915;min-width:0;animation:rise .7s ease both}\n.card:after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:25px;padding:1px;background:linear-gradient(135deg,#ff2c91aa,#8b5cf688,#22d3ee88,transparent 70%);mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask-composite:exclude;opacity:.95}
+.card:nth-child(2){animation-delay:.12s}
+.card:before{content:"";position:absolute;left:24px;right:24px;top:0;height:1px;background:linear-gradient(90deg,transparent,#67f5ff99,#a78bfa88,transparent)}
+.card h2{font-size:18px;margin:0 0 8px;letter-spacing:-.02em}
+.label{display:block;font-size:12px;font-weight:700;margin:16px 0 7px;color:#d8e5f8}
+input{width:100%;padding:13px 14px;border:1px solid #2b3b56;border-radius:13px;background:#080f1c;color:#f3f8ff;font:13px Manrope;outline:none;transition:border-color .2s,box-shadow .2s}
+input::placeholder{color:#687995}
+input:focus{border-color:#67f5ff;box-shadow:0 0 0 3px #67f5ff17}
+.row{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}
+.status{font-size:12px;min-height:24px;margin-top:12px;color:var(--muted);overflow-wrap:anywhere}
+.status.good{color:var(--green)}.status.bad{color:var(--bad)}
+.qrbox{display:grid;place-items:center;gap:12px;min-height:290px;border:1px dashed #354b6c;border-radius:19px;background:radial-gradient(ellipse at 50% 0%,#67f5ff0d,transparent 65%),#080f1c;padding:18px;margin-top:14px;transition:border-color .25s,background .25s}
+.qrbox:has(.code:not(.hidden)),.qrbox:has(img:not(.hidden)){border-color:#67f5ff80;background-color:#0b1726}
+.qrbox img{width:min(100%,270px);border-radius:12px;background:#fff;padding:8px;box-shadow:0 0 36px #67f5ff15;animation:pop .3s ease}
+.code{font-size:clamp(24px,5vw,34px);letter-spacing:.12em;font-weight:800;text-align:center;overflow-wrap:anywhere;color:var(--cyan);text-shadow:0 0 24px #67f5ff30;animation:pop .3s ease}
+.toggle{display:flex;justify-content:space-between;gap:15px;align-items:center;padding:13px 0;border-bottom:1px solid #26354b;font-size:13px;font-weight:700;color:#dce8f8}
+.toggle input{width:19px;height:19px;accent-color:#67f5ff;flex:0 0 auto}
+.foot{padding:25px 0 35px;color:#6f809b;font-size:11px;text-align:center}
+.hidden{display:none!important}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pop{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:scale(1)}}
+@media(max-width:720px){.grid{grid-template-columns:1fr}.card{padding:19px}.hero{padding-top:18px}.top{padding:15px 0}.row .btn{flex:1}.qrbox{min-height:250px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+</style></head><body><header class="wrap top"><a class="brand" href="index.html"><span class="logo">VFX</span><span>VFX AI MINI<div class="muted" style="font-size:10px">POWERED BY SOURAJIT VFX</div></span></a><button class="btn" id="logout">Log out</button></header>
+<main class="wrap"><section class="hero"><div class="eyebrow">SECURE ACCOUNT · PERSONAL SESSION</div><h1>Connect your WhatsApp.</h1><p class="muted">Your session and settings are isolated to your signed-in Firebase account. Only connect an account you own or are authorized to manage.</p></section>
+<div class="grid"><section class="card"><h2>01 / Pair device</h2><p class="muted">Choose a pairing code or QR. Never share your code or QR with anyone.</p><label class="label" for="phone">Phone number with country code (pairing code only)</label><input id="phone" inputmode="numeric" autocomplete="tel" placeholder="91XXXXXXXXXX"><div class="row"><button class="btn primary" id="pair">Generate pairing code</button><button class="btn" id="qr">Generate QR</button></div><div class="status" id="connectStatus" role="status" aria-live="polite">Checking sign-in…</div><div class="qrbox"><div id="qrPlaceholder" class="muted">Your QR code or pairing code will appear here.</div><img id="qrImage" class="hidden" alt="WhatsApp linking QR code"><div id="pairCode" class="code hidden"></div></div><div class="row"><button class="btn" id="refresh">Refresh status</button><button class="btn" id="disconnect">Disconnect WhatsApp</button></div><p class="muted">In WhatsApp: Linked devices → Link a device. For a pairing code, choose “Link with phone number” and enter the code.</p></section>
+<section class="card"><h2>02 / Live bot settings</h2><p class="muted">Changes are saved for your account and applied to your session.</p><label class="label" for="botName">Bot name</label><input id="botName" maxlength="60" value="VFX AI MINI"><label class="label" for="botPictureUrl">Menu image URL (HTTPS)</label><input id="botPictureUrl" type="url" placeholder="https://example.com/menu.jpg"><label class="label" for="prefix">Command prefix</label><input id="prefix" maxlength="3" value="."><div class="toggle"><span>Auto-read messages</span><input type="checkbox" id="autoRead"></div><div class="toggle"><span>Auto-react ✨</span><input type="checkbox" id="autoReact"></div><div class="toggle"><span>Anti-link (groups; bot admin required)</span><input type="checkbox" id="antiLink"></div><div class="toggle"><span>Welcome new group members</span><input type="checkbox" id="welcome"></div><div class="toggle"><span>Private mode</span><input type="checkbox" id="privateMode" checked></div><div class="row"><button class="btn primary" id="save">Save settings</button><button class="btn" id="load">Reload settings</button></div><div class="status" id="settingsStatus" role="status" aria-live="polite"></div></section></div><div class="foot">VFX AI MINI · Multi-user WhatsApp integration · Unofficial WhatsApp Web client.</div></main>
+<script type="module">
+import {auth} from './firebase.js';
+import {onAuthStateChanged,signOut} from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js';
+const API_BASE = 'https://industrial-conni-sourajit-733e21ee.koyeb.app';
+const $ = id => document.getElementById(id);
+let user = null;let statusPoller=null;
+function startPolling(){if(statusPoller)clearInterval(statusPoller);statusPoller=setInterval(async()=>{try{const d=await api('/api/status');renderStatus(d);if(d.connected){clearInterval(statusPoller);statusPoller=null}}catch{}},2000)}
+function message(id,text,kind=''){const el=$(id);el.textContent=text;el.className='status '+kind}
+async function api(path, options={}) {
+  if (!user) throw new Error('Sign in first.');
+  if (API_BASE.includes('YOUR-SERVICE')) throw new Error('Set API_BASE in connect.html to your Koyeb service URL first.');
+  const token=await user.getIdToken();
+  const response=await fetch(API_BASE+path,{...options,headers:{'Content-Type':'application/json','Authorization':'Bearer '+token,...(options.headers||{})}});
+  const data=await response.json().catch(()=>({error:'Invalid server response'}));
+  if(!response.ok) throw new Error(data.error||'Request failed');
+  return data;
+}
+function renderStatus(data){
+  $('qrImage').classList.add('hidden');$('pairCode').classList.add('hidden');$('qrPlaceholder').classList.remove('hidden');
+  if(data.pairingCode){$('pairCode').textContent=data.pairingCode;$('pairCode').classList.remove('hidden');$('qrPlaceholder').classList.add('hidden')}
+  else if(data.qrDataUrl){$('qrImage').src=data.qrDataUrl;$('qrImage').classList.remove('hidden');$('qrPlaceholder').classList.add('hidden')}
+  $('qrPlaceholder').textContent=data.message||data.state||'No session';
+  message('connectStatus',data.message||data.state,data.connected?'good':'');
+}
+const settingKeys=['autoRead','autoReact','antiLink','welcome','privateMode'];
+function readSettings(){return {botName:$('botName').value.trim(),botPictureUrl:$('botPictureUrl').value.trim(),prefix:$('prefix').value.trim(),...Object.fromEntries(settingKeys.map(k=>[k,$(k).checked]))}}
+function fillSettings(s){$('botName').value=s.botName||'VFX AI MINI';$('botPictureUrl').value=s.botPictureUrl||'';$('prefix').value=s.prefix||'.';for(const k of settingKeys)$(k).checked=Boolean(s[k])}
+async function loadSettings(){try{const d=await api('/api/settings');fillSettings(d.settings);message('settingsStatus','Settings loaded.','good')}catch(e){message('settingsStatus',e.message,'bad')}}
+async function refreshStatus(){try{renderStatus(await api('/api/status'))}catch(e){message('connectStatus',e.message,'bad')}}
+onAuthStateChanged(auth,async u=>{if(!u){location.replace('auth.html');return}user=u;message('connectStatus','Signed in. Loading your private session…');await Promise.all([refreshStatus(),loadSettings()])});
+$('pair').onclick=async()=>{try{message('connectStatus','Requesting a private pairing code…');const phoneNumber=$('phone').value.replace(/\D/g,'');if(!phoneNumber)throw new Error('Enter your phone number with country code.');renderStatus(await api('/api/whatsapp/connect',{method:'POST',body:JSON.stringify({phoneNumber})}));startPolling()}catch(e){message('connectStatus',e.message,'bad')}};
+$('qr').onclick=async()=>{try{message('connectStatus','Starting QR session…');renderStatus(await api('/api/whatsapp/connect',{method:'POST',body:JSON.stringify({})}));startPolling()}catch(e){message('connectStatus',e.message,'bad')}};
+$('refresh').onclick=refreshStatus;
+$('disconnect').onclick=async()=>{try{const d=await api('/api/whatsapp/disconnect',{method:'POST',body:'{}'});if(statusPoller)clearInterval(statusPoller);statusPoller=null;renderStatus({state:'disconnected',message:d.message})}catch(e){message('connectStatus',e.message,'bad')}};
+$('save').onclick=async()=>{try{const s=readSettings();const d=await api('/api/settings',{method:'PATCH',body:JSON.stringify(s)});fillSettings(d.settings);message('settingsStatus','Settings saved successfully.','good')}catch(e){message('settingsStatus',e.message,'bad')}};
+$('load').onclick=loadSettings;
+$('logout').onclick=async()=>{await signOut(auth);location.href='auth.html'};
+</script></body></html>
