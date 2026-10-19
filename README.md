@@ -1,25 +1,33 @@
-# 𝐒ꭷᴜʀᴀᴊɪᴛ メ 𝐕𝐅𝐗 — Mini
+# VFX AI MINI — by SOURAJIT VFX
 
-A branded WhatsApp bot project workspace.
+VFX AI MINI is the branded web interface for the multi-user WhatsApp bot in this repository. The existing Firebase sign-in flow, private user sessions, QR pairing, pairing-code generation, and per-user settings are retained.
 
-> **Status:** Repository setup / starter files. This is not yet the complete upstream bot source.
+## Project layout
 
-## Before running
+- `index.html` — landing page
+- `auth.html` — Firebase authentication
+- `dashboard.html` — authenticated dashboard
+- `connect.html` — VFX AI MINI pairing page (pairing code + QR)
+- `server.js` — authenticated Express/Baileys API
+- `index.js` — single-session bot entry point
+- `firebase.js` — Firebase web configuration (public client config only)
+- `plugins.js`, `commands.js`, `downloader.js`, `media.js`, `settings.js` — bot functionality
 
-- Use Node.js 20 or the version required by your chosen bot framework.
-- Install dependencies only after the project source and `package.json` are present.
-- Keep API keys, database URLs, WhatsApp session files, and tokens private.
-- Never commit `.env`, session credentials, or generated auth files.
-- Use pairing only for your own WhatsApp account and never send pairing codes to third parties.
+## Hosting
 
-## Configuration
+The static website can be hosted on GitHub Pages or another static host. The Express/Baileys API must run as a persistent Node.js service (for example, Koyeb) because WhatsApp Web sockets and session files cannot be kept alive in Vercel serverless functions.
 
-Create a local `.env` from `.env.example` and fill in your own credentials. Do not commit the real `.env` file.
+1. Deploy this repository's Node.js API with build command `npm install` and start command `npm start`.
+2. Configure `FIREBASE_SERVICE_ACCOUNT_JSON` as a private service environment variable.
+3. Mount persistent storage, set `DATA_DIR=/data`, and ensure the service has a persistent volume mounted at `/data`.
+4. Set `ALLOWED_ORIGINS` to the exact website origin.
+5. In `connect.html`, ensure `API_BASE` points at the deployed API origin.
+6. Follow [FIREBASE-SETUP.md](FIREBASE-SETUP.md) and [BOT-SETUP.md](BOT-SETUP.md) for complete setup instructions.
 
-## Source and attribution
+## Security
 
-This repository is intended for a safe, transparently maintained customization. If you import code from another project, preserve its license and copyright notices and document the upstream source.
+Never commit real `.env` files, Firebase service-account JSON, WhatsApp session folders, tokens, pairing codes, or QR codes. The backend checks Firebase ID tokens on private API routes and scopes session storage to the authenticated user.
 
 ## Disclaimer
 
-This is an unofficial WhatsApp automation project. Use responsibly and understand that third-party automation may violate platform terms or lead to account restrictions.
+This is an unofficial WhatsApp Web automation project based on Baileys. Use only with an account you own or are authorized to manage and understand that third-party automation may violate WhatsApp terms or lead to account restrictions.
